@@ -1,0 +1,28 @@
+{% extends './layout.njk' %}
+
+{% block style %}
+{% endblock %}
+
+
+{% block content %}
+<div class="reserve-section">
+  <div class="reserve-title">
+    <div class="reserve-title__text">预约试驾</div>
+  </div>
+  <div class="reserve-form">
+    <div class="form-title">
+      欢迎在线预约试驾。只需填写姓名及手机号，我们会第一时间与您联系，安排试驾事宜。
+    </div>
+    <div class="form-table">
+      <input type="text" id="name" name="name" placeholder="您的姓名">
+      <input type="tel" id="tel" name="tel" placeholder="您的电话">
+      <button id="form-submit">马上抢占名额</button>
+    </div>
+  </div>
+  <div class="reserve-mobile"></div>
+</div>
+
+{% endblock %}
+  
+{% block js %}
+{% endblock %}

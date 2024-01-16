@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/stylesheets/reset.css">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="/stylesheets/index.css">
+  
+  <title>{{title}}</title>
+  <style>
+    .backend-section {
+      display: flex;
+      height: 100%;
+    }
+
+    .backend-left {
+      width: 260px;
+      height: 100%;
+      color: #fff;
+      background-color: #212121;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      color: #8b8c8c;
+    }
+
+    .nav-item {
+      line-height: 60px;
+      padding: 0 20px;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      color: #bbb;
+    }
+
+    .nav-item.active {
+      background-color: #333;
+    }
+
+    .backend-right {
+      padding: 20px;
+      font-size: 20px;
+    }
+
+    .backend-title{
+      margin-bottom: 20px;
+    }
+
+  </style>
+  {% block style %}
+  {% endblock %}
+</head>
+<body>
+  <header class="page-header">
+    {% block headerLeft %}
+    <div class="header-left"> 
+      <div class="header-logo"></div>
+      <div class="header-title">
+        <div class="header-title__main">Mercedes-Benz</div>
+        <div class="header-title__sub">The best or nothing.</div>
+      </div>
+    </div>
+    {% endblock %}
+    
+    {% block headerRight %}
+    <div class="header-right"> 
+      <!-- {{user}} -->
+      <div class="header-user">孙磊超</div>
+      <div class="header-quit">退出</div>
+    </div>
+    {% endblock %}
+
+  </header>
+
+  <div class="page-body">
+    <div class="backend-section">
+      <div class="backend-left">
+        <div class="nav-list">
+          <div class="nav-item active user" data-id="1" name="user">人员管理</div>
+          <div class="nav-item clue" data-id="2" name="clue">线索管理</div>
+        </div>
+      </div>
+      {% block backendRight %}
+      {% endblock %}
+
+    </div>
+  </div>
+
+  {% block footer %}
+  <footer class="page-footer">
+    <div class="page-footer__copyright">
+      Copyright@2019 xxxx体验技术部出品（孙磊超重置 2024/1/16）
+    </div>
+  </footer>
+  {% endblock %}
+
+
+  <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+
+  {% block js %}
+  {% endblock %}
+
+  <script>
+    const PAGE = {
+      init:function(){
+        this.bind()
+      },
+      bind:function(){
+        // 根据页面，active的转换
+        this.activeToggle();
+        // 跳转功能 
+        this.navRedirect();
+
+        this.handleQuit();        
+      },
+      activeToggle:function(){
+        let navItems = document.getElementsByClassName('nav-item')
+        for(let i = 0;i<navItems.length;i++){
+          navItems[i].classList.remove('active')
+          if(navItems[i].classList.contains("{{page}}")){
+            navItems[i].classList.add('active')
+          }
+        }
+      },
+      navRedirect:function(){
+        let navItems = document.getElementsByClassName('nav-item')
+        for(let i = 0;i<navItems.length;i++){
+          navItems[i].onclick = function(e){
+            location.href = "/admin/" + e.target.getAttribute("name");
+          }
+        }
+      },
+      handleQuit: function() {
+        let headerQuit = document.getElementsByClassName('header-quit')[0]
+        headerQuit.onclick = function(){
+          location.href = "/admin/login";
+        }
+      }
+    }
+    PAGE.init()
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,25 @@
+.backend-table {
+  width: 100%;
+  margin-top: 30px;
+  border-collapse: collapse;
+}
+
+.backend-table tr {
+  line-height: 40px;
+}
+
+.backend-table td,
+.backend-table th {
+  border: 1px solid #e1e4e6;
+}
+
+.backend-table tbody tr:nth-child(2n+1) {
+  background-color: #f6f8fa;
+}
+
+.backend-table .operation {
+  color: #00d;
+  text-decoration: underline;
+  cursor: pointer;
+}
+

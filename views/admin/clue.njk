@@ -1,0 +1,72 @@
+{% extends './layoutBackend.njk' %}
+
+{% block style %}
+<link rel="stylesheet" href="/stylesheets/tableShow.css">
+
+<style>
+  .backend-right{
+    flex:1;
+  }
+</style>
+{% endblock %}
+
+{% block backendRight %}
+<div class="backend-right">
+  <div class="backend-title">线索管理</div>
+  <table class="backend-table">
+    <thead>
+      <tr>
+        <th>姓名</th>
+        <th>电话</th>
+        <th>来源</th>
+        <th>创建时间</th>
+        <th>跟踪销售</th>
+        <th>状态</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for customer in customers %}
+
+      <tr id="{{ customer.id }}">
+        <td>{{ customer.name }}</td>
+        <td>{{ customer.phone }}</td>
+        <td>{{ customer.source }}</td>
+        <td>{{ customer.created_at }}</td>
+        <td>销售人员</td>
+        <td>{{ customer.status }}</td>
+        <td class="operation">操作</td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+  
+{% block js %}
+<script>
+  const cluePage = {
+    init:function(){
+      this.bind()
+    },
+    bind:function(){
+      // 操作按钮的事件绑定
+      let backendTable = document.getElementsByClassName("backend-table")[0]
+      this.onEventListener(backendTable, 'click', "operation", this.openClueDetail)
+    },
+    onEventListener: function (parentNode, action, childClassName, callback) {
+      parentNode.addEventListener(action, (e) => {
+        if (e.target.className.indexOf(childClassName) !== -1) {
+          callback(e)
+        }
+      })
+    },
+    openClueDetail:function(e){
+      let id = e.target.parentNode.getAttribute('id');
+      location.href = "/admin/clue/" + id;
+    },
+  }
+  cluePage.init()
+</script>
+{% endblock %}

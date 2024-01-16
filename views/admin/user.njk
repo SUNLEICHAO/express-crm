@@ -1,0 +1,66 @@
+{% extends './layoutBackend.njk' %}
+
+{% block style %}
+<link rel="stylesheet" href="/stylesheets/tableShow.css">
+
+<style>
+  .backend-right{
+    width:800px;
+  }
+</style>
+{% endblock %}
+
+{% block backendRight %}
+<div class="backend-right">
+  <div class="backend-title">人员管理</div>
+  <table class="backend-table">
+    <thead>
+      <tr>
+        <th>姓名</th>
+        <th>手机</th>
+        <th>角色</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr id="{{user.id}}">
+          <td>{{ user.name }}</td>
+          <td>{{ user.phone }}</td>
+          <td>{{ user.role }}</td>
+          <td class="operation">操作</td>
+        </tr>
+      
+      {% endfor %}
+      
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+  
+{% block js %}
+<script>
+  const userPage = {
+    init:function(){
+      this.bind()
+    },
+    bind:function(){
+      // 操作按钮的事件绑定
+      let backendTable = document.getElementsByClassName("backend-table")[0]
+      this.onEventListener(backendTable, 'click', "operation", this.openUserDetail)
+    },
+    onEventListener: function (parentNode, action, childClassName, callback) {
+      parentNode.addEventListener(action, (e) => {
+        if (e.target.className.indexOf(childClassName) !== -1) {
+          callback(e)
+        }
+      })
+    },
+    openUserDetail:function(e){
+      let id = e.target.parentNode.getAttribute('id');
+      location.href = "/admin/user/" + id;
+    },
+  }
+  userPage.init()
+</script>
+{% endblock %}

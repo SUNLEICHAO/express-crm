@@ -1,0 +1,135 @@
+{% extends './layoutBackend.njk' %}
+
+
+{% block style %}
+<style>
+  .backend-right{
+    flex:1;
+  }
+  .clue-container {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  .clue-container>div {
+    background-color: #f1f2f2;
+    flex: 1;
+    padding: 20px 10px 0;
+  }
+
+  .clue-left>div {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .clue-stuff__text,
+  .clue-statue__text {
+    font-size: 18px;
+    border-bottom: 1px solid #333;
+    padding: 10px;
+  }
+
+  .clue-remark {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .clue-remark__input,
+  .clue-add__input {
+    margin: 10px 0 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    outline: none;
+    height: 100px;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .clue-remark__save,
+  .clue-add__submit {
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+    line-height: 30px;
+    cursor: pointer;
+  }
+
+  .trace-item {
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 10px;
+  }
+
+  .trace-item__text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+  }
+
+  .clue-add {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .clue-add {
+    margin-top: 20px;
+  }
+</style>
+{% endblock %}
+
+{% block backendRight %}
+<div class="backend-right">
+  <div class="backend-title">返回线索列表>></div>
+  <div class="clue-container">
+    <div class="clue-left">
+      <div class="clue-name">客户名称：客户1</div>
+      <div class="clue-tel">联系电话：13231018989</div>
+      <div class="clue-src">线索来源：baidu</div>
+      <div class="clue-create">创建时间：2019/03/15 11:11:11</div>
+      <div class="clue-statue">
+        <div class="clue-statue__title">用户状态</div>
+        <div class="clue-statue__text">没有意向</div>
+      </div>
+      <div class="clue-stuff">
+        <div class="clue-stuff__title">当前分配销售</div>
+        <div class="clue-stuff__text">陈奕迅</div>
+      </div>
+      <div class="clue-remark">
+        <div class="clue-remark__title">备注</div>
+        <textarea class="clue-remark__input" name="remark" id="" cols="30" rows="10">备xxxxx注</textarea>
+        <button class="clue-remark__save">保存</button>
+      </div>
+    </div>
+    <div class="clue-right">
+      <div class="trace-list">
+        <div class="trace-item">
+          <div class="trace-item__title">
+            2019/03178 16:04:00
+          </div>
+          <div class="trace-item__text">
+            跟踪内容1
+          </div>
+        </div>
+        <div class="trace-item">
+          <div class="trace-item__title">
+            2019/03178 16:04:00
+          </div>
+          <div class="trace-item__text">
+            跟踪内容1
+          </div>
+        </div>
+      </div>
+      <div class="clue-add">
+        <div class="clue-add__title">添加记录：</div>
+        <textarea class="clue-add__input" name="remark" id="" cols="30" rows="10" placeholder="请输入本次跟踪的记录~"></textarea>
+        <button class="clue-add__submit">添加</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+  
+{% block js %}
+{% endblock %}

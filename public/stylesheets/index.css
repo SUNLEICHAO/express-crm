@@ -1,0 +1,165 @@
+body {
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+
+body>div {
+  flex-grow: 1;
+}
+
+.page-header {
+  height: 80px;
+  background-color: #222;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  font-family: "MB_HYZSJBT", "MB_HYZSJBTExt", "DaimlerCAC", "SimSun", "serif";
+}
+
+.header-left {
+  justify-content: space-between;
+  display: flex;
+  align-items: flex-end;
+}
+
+.header-logo {
+  width: 80px;
+  height: 80px;
+  background: url(../images/new-header-logo.svg) no-repeat center/80px;
+  margin-right: 40px;
+}
+
+.header-title {
+  text-align: right;
+  padding-right: 20px;
+  border-right: 2px solid #444;
+}
+
+.header-title__main {
+  font-size: 26px;
+}
+
+.header-title__sub {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.header-right{
+  display: flex;
+  font-size: 18px;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-quit{
+  border-bottom: 1px solid #fff;
+  cursor: pointer;
+}
+
+.reserve-section {
+  position: relative;
+  padding: 0 400px;
+  margin: 40px auto 0;
+}
+
+.reserve-title {
+  position: relative;
+  text-align: center;
+}
+
+.reserve-title::before {
+  content: '';
+  top: 50%;
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #e2e2e2;
+}
+
+.reserve-title__text {
+  position: relative;
+  display: inline-block;
+  padding: 0 26px;
+  font-size: 40px;
+  color: #2d2d2d;
+  background-color: #fff;
+  z-index: 9;
+}
+
+.reserve-form {
+  position: relative;
+  width: 500px;
+  color: #6c6c6c;
+  font-weight: 550;
+  padding: 60px 0 80px;
+}
+
+.form-title {
+  line-height: 3;
+  font-size: 16px;
+}
+
+.form-table {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.form-table input {
+  border: none;
+  height: 40px;
+  padding-left: 20px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #cfcfcf;
+  outline: none;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* .form-table input:first-child {
+  margin-bottom: 30px;
+}
+
+.form-table input:nth-child(2) {
+  margin-bottom: 20px;
+} */
+
+.form-table button {
+  background-color: #222;
+  color: #fff;
+  font-size: 16px;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.form-table button:hover {
+  opacity: .8;
+}
+
+.reserve-mobile {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1200px;
+  height: 100%;
+  background-color: pink;
+  background: url(../images/mo-c-1.png) no-repeat -60px center/120%;
+}
+
+/* 底部说明文字 */
+.page-footer {
+  height: 40px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+}
+
+.page-footer__copyright {
+  line-height: 40px;
+}

@@ -1,0 +1,86 @@
+{% extends '../layout.njk' %}
+
+{% block style %}
+<style>
+  .login-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: calc(100vh - 160px);
+    background: url(/images/pc1.jpg) no-repeat center/100%;
+  }
+
+  .login-section .login-form {
+    width: 360px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, .7);
+    padding: 40px 60px;
+  }
+
+  .login-section .login-title {
+    /* line-height: 30px; */
+    font-size: 36px;
+    text-align: center;
+  }
+
+  .login-section input {
+    background-color: transparent;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-section">
+  <div class="login-form">
+    <div class="login-title">MERCEDS-BENZ</div>
+    <div class="form-table login">
+      <input type="tel" id="tel" name="tel" placeholder="请输入您的手机">
+      <input type="password" id="password" name="password" placeholder="请输入你的密码">
+      <button id="form-submit">马上登录</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+  
+{% block js %}
+
+<script>
+  const loginPage = {
+    init:function(){
+      this.bind()
+    },
+    bind:function(){
+      $('#form-submit').on('click',this.handleSumbit)
+    },
+    handleSumbit: function(){
+      console.log('现在就提交')
+      let tel = $('#tel').val()
+      let password = $('#password').val()
+      if(!tel||!password){
+        alert('请将信息填写完整~')
+        return
+      }
+      $.ajax({
+        url: '/api/login',
+        data: { tel, password },
+        type: 'GET',
+        success: function (data) {
+          if (data.code === 200) {
+            // alert('登陆成功!')
+            location.href = "/admin/user";
+            //location.reload()
+          } else {
+            console.log(data);
+          }
+        },
+        error: function (err) {
+          console.log(err);
+        }
+
+      })
+    }
+  }
+  loginPage.init()
+</script>
+{% endblock %}

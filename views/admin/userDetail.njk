@@ -1,0 +1,29 @@
+{% extends './layoutBackend.njk' %}
+
+{% block style %}
+<style>
+  .userslist {
+    width: 600px;
+  }
+</style>
+{% endblock %}
+
+
+{% block backendRight %}
+<div class="backend-right userslist">
+  <div class="backend-title">返回用户列表>></div>
+  <h2>{{clueInfo}}</h2>
+
+  <div class="form-table">
+      <input type="name" id="name" name="name" value="{{name}}">
+      <input type="tel" id="tel" name="tel" value="{{tel}}">
+      <input type="password" id="password" name="password" value="{{password}}">
+      <input type="role" id="role" name="role" value="{{role}}">
+      <button id="form-submit">保存</button>
+    </div>
+</div>
+{% endblock %}
+  
+{% block js %}
+
+{% endblock %}
