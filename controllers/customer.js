@@ -7,7 +7,6 @@ const userModel = new userModelClass();
 const clueModelClass = require('../models/clueModel')
 const clueModel = new clueModelClass();
 
-
 // 状态对应的不同情况
 let statusDict = {
   "0": '不明',
@@ -18,6 +17,10 @@ let statusDict = {
 
 const customer = {
   showAll: async function (req, res, next) {
+    if (!res.locals.isLogin) {
+      res.redirect('/admin/login')
+      return
+    }
     try {
       let customers = await customerModel.all();
       // 对数据库中的一些数据进行转换
@@ -43,6 +46,11 @@ const customer = {
     }
   },
   showOne: async function (req, res, next) {
+    if (!res.locals.isLogin) {
+      res.redirect('/admin/login')
+      return
+    }
+
     let id = req.params.id;
     try {
       const customers = await customerModel.select({ id });
@@ -65,7 +73,7 @@ const customer = {
       // 时间格式的转换
       customer.created_at = customer.created_at.toLocaleString()
 
-      clues.map(e=>e.created_at = e.created_at.toLocaleString())
+      clues.map(e => e.created_at = e.created_at.toLocaleString())
 
       res.render('admin/clueDetail', {
         page: 'clue',
@@ -79,18 +87,19 @@ const customer = {
     }
   },
   signup: async function (req, res, next) {
-    res.render('signup', res.locals)
+    // 将网址传递的参数拿到，并传递到模板中（模板拿到，发送ajax时带上该参数）
+    res.render('signup', { utf: req.query.utf })
   },
 
   // 以下为api接口
   insert: async function (req, res, next) {
     let name = req.body.name;
     let tel = req.body.tel;
+    let source = req.body.utf || '未知来源';
     try {
-      const customer = await customerModel.insert({ name, phone: tel })
+      const customer = await customerModel.insert({ name, phone: tel, source })
       if (customer.length) {
         res.json({ code: 200, data: customer })
-
       } else {
         res.json({ code: 0, data: customer })
       }
@@ -98,6 +107,22 @@ const customer = {
       res.json({ code: 100, data: e })
     }
   },
+  update: async function (req, res, next) {
+    let id = req.body.id;
+    let remark = req.body.remark;
+    try {
+      const customer = await customerModel.update(id, { remark })
+      console.log(typeof customer);
+      if (customer) {
+        res.json({ code: 200, data: customer })
+      } else {
+        res.json({ code: 0, data: customer })
+      }
+    } catch (e) {
+      res.json({ code: 100, data: e })
+    }
+  },
+
 }
 
 module.exports = customer

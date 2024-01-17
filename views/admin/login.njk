@@ -2,20 +2,24 @@
 
 {% block style %}
 <style>
+  .page-body{
+    background-color: #222;
+  }
+
   .login-section {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100vw;
-    height: calc(100vh - 160px);
     background: url(/images/pc1.jpg) no-repeat center/100%;
   }
 
   .login-section .login-form {
     width: 360px;
     margin: 0 auto;
-    background-color: rgba(255, 255, 255, .7);
+    background-color: rgba(255, 255, 255, .8);
     padding: 40px 60px;
+    border-radius: 10px;
   }
 
   .login-section .login-title {
@@ -33,7 +37,7 @@
 {% block content %}
 <div class="login-section">
   <div class="login-form">
-    <div class="login-title">MERCEDS-BENZ</div>
+    <div class="login-title">MERCEDES-BENZ</div>
     <div class="form-table login">
       <input type="tel" id="tel" name="tel" placeholder="请输入您的手机">
       <input type="password" id="password" name="password" placeholder="请输入你的密码">
@@ -66,17 +70,16 @@
         type: 'POST',
         success: function (data) {
           if (data.code === 200) {
-            // alert('登陆成功!')
-            location.href = "/admin/user";
-            //location.reload()
+            // location.href = "/admin/user";
+            location.reload()
           } else {
+            alert('密码输入错误或账户不存在')
             console.log(data);
           }
         },
         error: function (err) {
           console.log(err);
         }
-
       })
     }
   }

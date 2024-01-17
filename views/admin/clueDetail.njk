@@ -102,7 +102,7 @@
       </div>
       <div class="clue-remark">
         <div class="clue-remark__title">备注</div>
-        <textarea class="clue-remark__input" name="remark" id="" cols="30" rows="10">{{ customer.remark }}</textarea>
+        <textarea class="clue-remark__input" name="remark" id="clue-remark__input" cols="30" rows="10">{{ customer.remark }}</textarea>
         <button class="clue-remark__save">保存</button>
       </div>
     </div>
@@ -146,21 +146,18 @@
       $('.clue-add__submit').on('click',this.handleSubmit)
     },
     handleSave:function(e){
-      let name = $('#name').val()
-      let tel = $('#tel').val()
-      let password = $('#password').val()
-      let role = $('#role').val()
-      if(!name || !tel || !password || !role){
-        alert('请补充参数！！')
+      let remark = $('#clue-remark__input').val()
+      if(!remark){
+        alert('请填入备注信息！')
         return
       }
       $.ajax({
-        url: "/api/user",
+        url: "/api/customer",
         type: "PUT",
-        //data: { id:{{userInfo}}, name, tel, password, role },
+        data: { id:{{ clueInfo }}, remark },
         success: function(data) {
           if(data.code===200){
-            alert('修改成功~')
+            alert('备注修改成功~')
             location.reload()
           }else{
             console.log(data)

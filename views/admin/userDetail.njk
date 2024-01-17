@@ -42,7 +42,7 @@
       let password = $('#password').val()
       let role = $('#role').val()
       if(!name || !tel || !password || !role){
-        alert('请补充参数！！')
+        alert('请补充参数1！！')
         return
       }
       // 发送申请时申请出id
@@ -51,7 +51,7 @@
       $.ajax({
         url: "/api/user",
         type: "PUT",
-        data: { id:{{userInfo}}, name, tel, password, role },
+        data: { id: {{userId}}, name, tel, password, role },
         success: function(data) {
           if(data.code===200){
             alert('修改成功~')

@@ -36,14 +36,14 @@
     handleSignup:function(){
       let name = $('#name').val()
       let tel = $('#tel').val()
-      if(!name||!tel){
+      if (!name || !tel){
         alert('请填充完整后重试~')
         return
       }
       $.ajax({
         url:'/api/customer',
-        method: "PUT",
-        data: { name, tel },
+        method: "POST",
+        data: { name, tel, utf:"{{utf}}" },
         success: function(data) {
           if(data.code===200){
             alert('信息提交成功，稍后会有工作人员与您联系~')

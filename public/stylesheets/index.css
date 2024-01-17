@@ -64,17 +64,18 @@ body>div {
 .page-body{
   flex: 1;
   display: flex;
-  overflow: scroll;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .reserve-section {
+  width: 100%;
   position: relative;
   padding: 0 400px;
   margin: 40px auto 0;
 }
 
 .reserve-title {
+  width: 100%;
   position: relative;
   text-align: center;
 }
@@ -100,7 +101,9 @@ body>div {
 }
 
 .reserve-form {
+  background-color: rgba(255, 255, 255, .8);
   position: relative;
+  z-index: 10;
   width: 500px;
   color: #6c6c6c;
   font-weight: 550;

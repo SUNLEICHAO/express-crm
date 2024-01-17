@@ -11,6 +11,9 @@ var apiRouter = require('./routes/api');
 var nunjucks = require('nunjucks');
 var favicon = require('serve-favicon')
 
+// 中间件
+var auth  = require('./middlewares/auth')
+
 var app = express();
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
@@ -27,6 +30,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// 问题，为什么中间件的位置要在路由前面
+app.use(auth)
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);

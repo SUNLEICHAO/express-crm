@@ -17,7 +17,6 @@ const clue = {
     }
   },
 
-  // 示例
   insert: async function (req, res, next) {
     let content = req.body.content;
     let customerid = req.body.customerid;

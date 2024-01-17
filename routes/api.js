@@ -19,7 +19,9 @@ router.put('/user',userController.update)
 router.get('/user',userController.select)
 
 // 顾客注册
-router.put('/customer',customerController.insert)
+router.post('/customer',customerController.insert)
+// 顾客备注的修改, 用put，幂等
+router.put('/customer',customerController.update)
 
 // 线索查找
 router.get('/clue',clueController.select)

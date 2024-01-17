@@ -12,8 +12,12 @@ const userController = require('../controllers/user');
 
 // 落地页（用户注册）
 router.get('/', customerController.signup);
+// router.get('/:utf', function (req, res, next) {
+//   res.redirect('/login',{})
+// });
 
 router.get('/admin/login', userController.login);
+router.get('/admin/logout', userController.logout);
 
 router.get('/admin/user', userController.showAll);
 router.get('/admin/user/:id', userController.showOne);

@@ -17,7 +17,6 @@
 
     .backend-left {
       min-width: 260px;
-      height: 100%;
       color: #fff;
       background-color: #212121;
     }
@@ -46,6 +45,7 @@
     .backend-right {
       padding: 20px;
       font-size: 20px;
+      overflow-y: auto;
     }
 
     .backend-title{
@@ -71,7 +71,7 @@
     {% block headerRight %}
     <div class="header-right"> 
       <!-- {{user}} -->
-      <div class="header-user">孙磊超</div>
+      <div class="header-user">{{userInfo.name}}</div>
       <div class="header-quit">退出</div>
     </div>
     {% endblock %}
@@ -139,7 +139,7 @@
       handleQuit: function() {
         let headerQuit = document.getElementsByClassName('header-quit')[0]
         headerQuit.onclick = function(){
-          location.href = "/admin/login";
+          location.href = "/admin/logout";
         }
       }
     }
