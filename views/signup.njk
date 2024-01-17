@@ -25,4 +25,39 @@
 {% endblock %}
   
 {% block js %}
+<script>
+  const signupPage = {
+    init:function(){
+      this.bind()
+    },
+    bind:function(){
+      $('#form-submit').on('click',this.handleSignup)
+    },
+    handleSignup:function(){
+      let name = $('#name').val()
+      let tel = $('#tel').val()
+      if(!name||!tel){
+        alert('请填充完整后重试~')
+        return
+      }
+      $.ajax({
+        url:'/api/customer',
+        method: "PUT",
+        data: { name, tel },
+        success: function(data) {
+          if(data.code===200){
+            alert('信息提交成功，稍后会有工作人员与您联系~')
+            location.reload()
+          } else {
+            console.log(data)
+          }
+        },
+        error: function(err) {
+          console.log(err)
+        }
+      })
+    },
+  }
+  signupPage.init()
+</script>
 {% endblock %}

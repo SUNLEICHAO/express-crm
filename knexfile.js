@@ -18,7 +18,7 @@ module.exports = {
     },
     migrations: {
       directory: './database/migrations',
-      tableName: '20240116031402_create_crm'
+      tableName: '20240116031402_create_crm1'
     },
     seeds: {
       directory: './database/seeds',

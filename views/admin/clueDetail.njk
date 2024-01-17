@@ -1,8 +1,11 @@
 {% extends './layoutBackend.njk' %}
 
-
 {% block style %}
 <style>
+  .backend-title{
+    cursor:pointer;
+  }
+
   .backend-right{
     flex:1;
   }
@@ -80,56 +83,120 @@
 {% endblock %}
 
 {% block backendRight %}
+
 <div class="backend-right">
   <div class="backend-title">返回线索列表>></div>
   <div class="clue-container">
     <div class="clue-left">
-      <div class="clue-name">客户名称：客户1</div>
-      <div class="clue-tel">联系电话：13231018989</div>
-      <div class="clue-src">线索来源：baidu</div>
-      <div class="clue-create">创建时间：2019/03/15 11:11:11</div>
+      <div class="clue-name">客户名称：{{ customer.name }}</div>
+      <div class="clue-tel">联系电话：{{ customer.phone }}</div>
+      <div class="clue-src">线索来源：{{ customer.source }}</div>
+      <div class="clue-create">创建时间：{{ customer.created_at }}</div>
       <div class="clue-statue">
         <div class="clue-statue__title">用户状态</div>
-        <div class="clue-statue__text">没有意向</div>
+        <div class="clue-statue__text">{{ customer.status }}</div>
       </div>
       <div class="clue-stuff">
         <div class="clue-stuff__title">当前分配销售</div>
-        <div class="clue-stuff__text">陈奕迅</div>
+        <div class="clue-stuff__text">{{ customer.username }}</div>
       </div>
       <div class="clue-remark">
         <div class="clue-remark__title">备注</div>
-        <textarea class="clue-remark__input" name="remark" id="" cols="30" rows="10">备xxxxx注</textarea>
+        <textarea class="clue-remark__input" name="remark" id="" cols="30" rows="10">{{ customer.remark }}</textarea>
         <button class="clue-remark__save">保存</button>
       </div>
     </div>
     <div class="clue-right">
       <div class="trace-list">
+
+        {% for clue_item in clue_list %}
         <div class="trace-item">
           <div class="trace-item__title">
-            2019/03178 16:04:00
+            {{ clue_item.created_at }}
           </div>
           <div class="trace-item__text">
-            跟踪内容1
+            {{ clue_item.content }}
           </div>
         </div>
-        <div class="trace-item">
-          <div class="trace-item__title">
-            2019/03178 16:04:00
-          </div>
-          <div class="trace-item__text">
-            跟踪内容1
-          </div>
-        </div>
+        {% endfor %}
+        
       </div>
       <div class="clue-add">
         <div class="clue-add__title">添加记录：</div>
-        <textarea class="clue-add__input" name="remark" id="" cols="30" rows="10" placeholder="请输入本次跟踪的记录~"></textarea>
+        <textarea class="clue-add__input" name="remark" id="clue-add__input" cols="30" rows="10" placeholder="请输入本次跟踪的记录~"></textarea>
         <button class="clue-add__submit">添加</button>
       </div>
     </div>
   </div>
 </div>
+
 {% endblock %}
   
 {% block js %}
+<script>
+
+  const clurDetailPage = {
+    init:function(){
+      this.bind()
+    },
+    bind:function(){
+      $('.backend-title').on('click',()=>{location.href = "/admin/clue/"})
+
+      $('.clue-remark__save').on('click',this.handleSave)
+      $('.clue-add__submit').on('click',this.handleSubmit)
+    },
+    handleSave:function(e){
+      let name = $('#name').val()
+      let tel = $('#tel').val()
+      let password = $('#password').val()
+      let role = $('#role').val()
+      if(!name || !tel || !password || !role){
+        alert('请补充参数！！')
+        return
+      }
+      $.ajax({
+        url: "/api/user",
+        type: "PUT",
+        //data: { id:{{userInfo}}, name, tel, password, role },
+        success: function(data) {
+          if(data.code===200){
+            alert('修改成功~')
+            location.reload()
+          }else{
+            console.log(data)
+          }
+        },
+        errot: function(err){
+          console.log(err)
+        }
+      })
+    },
+    handleSubmit: function() {
+      let content = $('#clue-add__input').val()
+      if(!content){
+        alert('请输入添加的记录！')
+        return
+      }
+      $.ajax({
+        url:'/api/clue',
+        method: 'POST',
+        data: { customerid: {{ clueInfo }},content },
+        success: function(data) {
+          if(data.code===200){
+            alert('添加成功~')
+            location.reload()
+          }else{
+            console.log(data)
+          }
+        },
+        errot: function(err){
+          console.log(err)
+        }
+      })
+    }
+  }
+  clurDetailPage.init()
+  //console.log({{clue_list}})
+  // <div>{{ clueInfo }}</div>
+</script>
 {% endblock %}

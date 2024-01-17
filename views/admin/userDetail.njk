@@ -5,6 +5,9 @@
   .userslist {
     width: 600px;
   }
+  .backend-title{
+    cursor:pointer;
+  }
 </style>
 {% endblock %}
 
@@ -12,18 +15,57 @@
 {% block backendRight %}
 <div class="backend-right userslist">
   <div class="backend-title">返回用户列表>></div>
-  <h2>{{clueInfo}}</h2>
 
   <div class="form-table">
-      <input type="name" id="name" name="name" value="{{name}}">
-      <input type="tel" id="tel" name="tel" value="{{tel}}">
-      <input type="password" id="password" name="password" value="{{password}}">
-      <input type="role" id="role" name="role" value="{{role}}">
+      <input type="name" id="name" name="name" value="{{ user.name }}">
+      <input type="tel" id="tel" name="tel" value="{{ user.phone }}">
+      <input type="text" id="password" name="password" value="{{ user.password }}">
+      <input type="role" id="role" name="role" value="{{ user.role }}">
       <button id="form-submit">保存</button>
     </div>
 </div>
 {% endblock %}
   
 {% block js %}
-
+<script>
+  const userDetailPage = {
+    init:function(){
+      this.bind()
+    },
+    bind:function(){
+      $('#form-submit').on('click',this.handleSave)
+      $('.backend-title').on('click',()=>{location.href = "/admin/user/"})
+    },
+    handleSave:function(e){
+      let name = $('#name').val()
+      let tel = $('#tel').val()
+      let password = $('#password').val()
+      let role = $('#role').val()
+      if(!name || !tel || !password || !role){
+        alert('请补充参数！！')
+        return
+      }
+      // 发送申请时申请出id
+      //location.href = "/admin/user/" + id;
+      // console.log(name, tel, password, role)
+      $.ajax({
+        url: "/api/user",
+        type: "PUT",
+        data: { id:{{userInfo}}, name, tel, password, role },
+        success: function(data) {
+          if(data.code===200){
+            alert('修改成功~')
+            location.reload()
+          }else{
+            console.log(data)
+          }
+        },
+        errot: function(err){
+          console.log(err)
+        }
+      })
+    },
+  }
+  userDetailPage.init()
+</script>
 {% endblock %}

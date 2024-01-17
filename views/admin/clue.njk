@@ -27,16 +27,15 @@
     </thead>
     <tbody>
       {% for customer in customers %}
-
-      <tr id="{{ customer.id }}">
-        <td>{{ customer.name }}</td>
-        <td>{{ customer.phone }}</td>
-        <td>{{ customer.source }}</td>
-        <td>{{ customer.created_at }}</td>
-        <td>销售人员</td>
-        <td>{{ customer.status }}</td>
-        <td class="operation">操作</td>
-      </tr>
+        <tr id="{{ customer.id }}">
+          <td>{{ customer.name }}</td>
+          <td>{{ customer.phone }}</td>
+          <td>{{ customer.source }}</td>
+          <td>{{ customer.created_at }}</td>
+          <td>{{ customer.user }}</td>
+          <td>{{ customer.status }}</td>
+          <td class="operation">操作</td>
+        </tr>
       {% endfor %}
 
     </tbody>

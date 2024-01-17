@@ -54,7 +54,6 @@
       $('#form-submit').on('click',this.handleSumbit)
     },
     handleSumbit: function(){
-      console.log('现在就提交')
       let tel = $('#tel').val()
       let password = $('#password').val()
       if(!tel||!password){
@@ -62,9 +61,9 @@
         return
       }
       $.ajax({
-        url: '/api/login',
+        url: '/api/user',
         data: { tel, password },
-        type: 'GET',
+        type: 'POST',
         success: function (data) {
           if (data.code === 200) {
             // alert('登陆成功!')
