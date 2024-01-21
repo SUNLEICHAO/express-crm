@@ -17,12 +17,31 @@
   <div class="backend-title">返回用户列表>></div>
 
   <div class="form-table">
-      <input type="name" id="name" name="name" value="{{ user.name }}">
-      <input type="tel" id="tel" name="tel" value="{{ user.phone }}">
-      <input type="text" id="password" name="password" value="{{ user.password }}">
-      <input type="role" id="role" name="role" value="{{ user.role }}">
-      <button id="form-submit">保存</button>
-    </div>
+    <input type="name" id="name" name="name" value="{{ user.name }}" placeholder="请填入姓名">
+    <input type="tel" id="tel" name="tel" value="{{ user.phone }}" placeholder="请填入电话">
+    <input type="text" id="password" name="password" value="{{ user.password }}" placeholder="请设置密码">
+    {# <select class="role" name="" id="role">
+      {% for saler in salers %}
+        <option value="{{saler.id}}" {% if saler.id ==  customer.userid %}selected{% endif %} >{{saler.name}}</option>
+      {% endfor %}
+    </select> #}
+
+    <select class="user-role__text" name="" id="user-role__text">
+      {% for role in roles %}
+        {# <option value="{{role.id}}" {% if saler.id ==  customer.userid %}selected{% endif %} >{{saler.name}}</option> #}
+        <option value="{{role.id}}">{{role.role}}</option>
+      {% endfor %}
+    </select>
+
+    {# <input type="role" id="role" name="role" value="{{ user.role }}" placeholder="请填入角色（admin或saler）"> #}
+        
+    {% if (user !== undefined) %}
+      <button id="form-submit__update">保存</button>
+    {% else %}
+      <button id="form-submit__insert">增加此人员</button>
+    {% endif %}
+
+  </div>
 </div>
 {% endblock %}
   
@@ -33,8 +52,11 @@
       this.bind()
     },
     bind:function(){
-      $('#form-submit').on('click',this.handleSave)
+      $('#form-submit__update').on('click',this.handleSave)
+      $('#form-submit__insert').on('click',this.handleInsert)
+
       $('.backend-title').on('click',()=>{location.href = "/admin/user/"})
+      console.log({{roles}})
     },
     handleSave:function(e){
       let name = $('#name').val()
@@ -65,6 +87,34 @@
         }
       })
     },
+    handleInsert: function(){
+      console.log('d')
+      let name = $('#name').val()
+      let tel = $('#tel').val()
+      let password = $('#password').val()
+      let role = $('#role').val()
+      if(!name || !tel || !password || !role){
+        alert('请补充参数1！！')
+        return
+      }
+      $.ajax({
+        url: "/api/user",
+        type: "POST",
+        data: { name, tel, password, role },
+        success: function(data) {
+          if(data.code===200){
+            alert('修改成功~')
+            {# location.reload() #}
+            location.href = "/admin/user"
+          }else{
+            console.log(data)
+          }
+        },
+        errot: function(err){
+          console.log(err)
+        }
+      })
+    }
   }
   userDetailPage.init()
 </script>

@@ -65,12 +65,11 @@
         return
       }
       $.ajax({
-        url: '/api/user',
+        url: '/api/login',
         data: { tel, password },
         type: 'POST',
         success: function (data) {
           if (data.code === 200) {
-            // location.href = "/admin/user";
             location.reload()
           } else {
             alert('密码输入错误或账户不存在')

@@ -30,6 +30,7 @@ class base {
     return knex(this.table).where('id', id).del()
   }
 
+  
 }
 
 module.exports = base;

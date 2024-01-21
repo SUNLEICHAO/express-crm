@@ -22,7 +22,7 @@ module.exports = {
     },
     seeds: {
       directory: './database/seeds',
-      tableName: '20240116031402_create_crm'
+      // tableName: '20240116031402_create_crm'
     }
   },
 

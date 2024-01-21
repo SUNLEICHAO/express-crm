@@ -10,7 +10,7 @@ exports.up = function (knex) {
       table.string('name', 255);
       table.string('phone', 255);
       table.string('password', 255);
-      table.string('role', 255);
+      // table.string('role', 255);
       table.timestamp('created_at').defaultTo(knex.fn.now())
       table.timestamp('updated_at').defaultTo(knex.fn.now())
     })

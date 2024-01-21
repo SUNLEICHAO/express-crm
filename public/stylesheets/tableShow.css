@@ -1,7 +1,11 @@
 .backend-table {
   width: 100%;
-  margin-top: 30px;
+  margin-top: 10px;
   border-collapse: collapse;
+}
+
+.backend-table thead {
+  font-weight: 600;
 }
 
 .backend-table tr {
@@ -11,6 +15,7 @@
 .backend-table td,
 .backend-table th {
   border: 1px solid #e1e4e6;
+  text-align: center;
 }
 
 .backend-table tbody tr:nth-child(2n+1) {
@@ -22,4 +27,3 @@
   text-decoration: underline;
   cursor: pointer;
 }
-

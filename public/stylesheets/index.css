@@ -51,14 +51,17 @@ body>div {
 
 .header-right{
   display: flex;
-  font-size: 18px;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
+  font-size: 22px;
 }
+
 
 .header-quit{
   border-bottom: 1px solid #fff;
   cursor: pointer;
+  margin-left: 20px;
+  font-size: 18px;
 }
 
 .page-body{

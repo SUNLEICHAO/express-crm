@@ -22,7 +22,23 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 nunjucks.configure('views', {
   autoescape: true,
   express: app
+}).addFilter('statusMap', function(status) { // 添加自定义过滤器
+  let statusList = {
+    "0": '不明',
+    "1": '未进店用户',
+    "2": '购买意愿强烈',
+    "3": '暂无购买意愿'
+  }
+  return statusList[status || "0"]
+}).addFilter('roleMap', function(role) { // 添加自定义过滤器
+  let roleList = {
+    "0": '未知身份',
+    "admin": '管理员',
+    "saler": '销售'
+  }
+  return roleList[role || "0"]
 });
+
 app.set('view engine', 'njk');
 
 app.use(logger('dev'));
@@ -32,7 +48,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 问题，为什么中间件的位置要在路由前面
-app.use(auth)
+app.use(auth.loginAuth)
+// app.use(auth.roleAuth)
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);

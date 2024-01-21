@@ -7,12 +7,19 @@
   .backend-right{
     width:800px;
   }
+  #backend-add{
+    color: green;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: right;
+  }
 </style>
 {% endblock %}
 
 {% block backendRight %}
 <div class="backend-right">
   <div class="backend-title">人员管理</div>
+  <div id="backend-add">[新增成员]</div>
   <table class="backend-table">
     <thead>
       <tr>
@@ -28,11 +35,9 @@
           <td>{{ user.name }}</td>
           <td>{{ user.phone }}</td>
           <td>{{ user.role }}</td>
-          <td class="operation">操作</td>
+          <td class="operation">编辑</td>
         </tr>
-      
       {% endfor %}
-      
     </tbody>
   </table>
 </div>
@@ -46,9 +51,11 @@
     },
     bind:function(){
       // 操作按钮的事件绑定
-      // 问题，这里可以用$直接操作，不必一定要用”事件委托“
+      // 问题，这里可以用$直接操作，不必用”事件委托“
       let backendTable = document.getElementsByClassName("backend-table")[0]
       this.onEventListener(backendTable, 'click', "operation", this.openUserDetail)
+
+      $('#backend-add').on('click',this.handleAdd)
     },
     onEventListener: function (parentNode, action, childClassName, callback) {
       parentNode.addEventListener(action, (e) => {
@@ -62,6 +69,9 @@
       let id = e.target.parentNode.getAttribute('id');
       location.href = "/admin/user/" + id;
     },
+    handleAdd: function(){
+      location.href = "/admin/user/" + "add"
+    }
   }
   userPage.init()
 </script>

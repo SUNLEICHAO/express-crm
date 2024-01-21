@@ -1,15 +1,32 @@
 const userModelClass = require('../models/userModel')
 const userModel = new userModelClass();
+
+const roleModelClass = require('../models/roleModel')
+const roleModel = new roleModelClass();
+
 // token设置
 const JWT = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const user = {
   showAll: async function (req, res, next) {
+    // 判断是否登录
     if (!res.locals.isLogin) {
       res.redirect('/admin/login')
       return
     }
+    // 判断是否为管理员
+    // if (res.locals.userInfo.role !== "admin") {
+    //   res.render('error', {
+    //     message: '出错了~',
+    //     error: {
+    //       status: 403,
+    //       stack: '您无权访问该页面！'
+    //     },
+    //     isBack: true,
+    //   })
+    //   return
+    // }
 
     // 展示出所有销售
     try {
@@ -29,16 +46,31 @@ const user = {
       res.redirect('/admin/login')
       return
     }
+
+    // if (res.locals.userInfo.role !== "admin") {
+    //   res.render('error', {
+    //     message: '出错了~',
+    //     error: {
+    //       status: 403,
+    //       stack: '您无权访问该页面！'
+    //     },
+    //     isBack: true,
+    //   })
+    //   return
+    // }
+
     let id = req.params.id;
     try {
       const users = await userModel.select({ id });
+      const roles = await roleModel.all();
       // 向页面中发送消息
       const user = users[0]
-
+      
       // 除了顾客的信息，还需要发送过来该用户对应的clue表格
       res.render('admin/userDetail', {
         page: 'user',
         userId: req.params.id,
+        roles,
         user,
       })
     } catch (e) {
@@ -79,7 +111,7 @@ const user = {
       let user = users[0]
       if (users.length) {
         // 生成token
-        let token = JWT.sign({ user_id: user.id, user_name: user.name }, JWT_SECRET, {
+        let token = JWT.sign({ user_id: user.id, user_name: user.name, user_role: user.role, }, JWT_SECRET, {
           expiresIn: "30d"
         });
         // 将其设置在cookie中
@@ -92,6 +124,18 @@ const user = {
       res.json({ code: 100, data: e })
     }
   },
+  insert:async function (req, res, next){
+    let name = req.body.name;
+    let tel = req.body.tel;
+    let password = req.body.password;
+    let role = req.body.role;
+    try {
+      const user = await userModel.insert({ name, phone: tel, password, role });
+      res.json({ code: 200, data: user })
+    } catch (e) {
+      res.json({ code: 100, data: e })
+    }
+  },
   update: async function (req, res, next) {
     let id = req.body.id;
     let name = req.body.name;
@@ -99,7 +143,9 @@ const user = {
     let password = req.body.password;
     let role = req.body.role;
     try {
-      const user = await userModel.update(id, { name, phone: tel, password, role });
+      const user = await userModel.update(id, { name, phone: tel, password });
+      const role = await roleModel.update(id, { role });
+
       res.json({ code: 200, data: user })
     } catch (e) {
       res.json({ code: 100, data: e })

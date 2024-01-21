@@ -3,6 +3,7 @@ var router = express.Router();
 
 const customerController = require('../controllers/customer');
 const userController = require('../controllers/user');
+const roleController = require('../controllers/role');
 
 /* GET home page. */
 // router.get('/', function (req, res, next) {
@@ -22,8 +23,12 @@ router.get('/admin/logout', userController.logout);
 router.get('/admin/user', userController.showAll);
 router.get('/admin/user/:id', userController.showOne);
 
+// 角色管理
+router.get('/admin/role', roleController.showAll);
+
 router.get('/admin/clue', customerController.showAll);
 router.get('/admin/clue/:id', customerController.showOne);
+
 
 // 测试页面
 router.get('/test', function (req, res, next) {

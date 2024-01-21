@@ -7,13 +7,6 @@ const userModel = new userModelClass();
 const clueModelClass = require('../models/clueModel')
 const clueModel = new clueModelClass();
 
-// 状态对应的不同情况
-let statusDict = {
-  "0": '不明',
-  "1": '未进店用户',
-  "2": '购买意愿强烈',
-  "3": '暂无购买意愿'
-}
 
 const customer = {
   showAll: async function (req, res, next) {
@@ -22,7 +15,15 @@ const customer = {
       return
     }
     try {
-      let customers = await customerModel.all();
+      // 请求全部的数据
+      let customersAll = await customerModel.all();
+      
+      // 获取要请求的页数
+      let current = req.query.current||1
+      let limit = req.query.limit||5
+      // 请求部分的数据
+      let customers = await customerModel.selectSpan(limit,(current-1)*limit);
+      console.log(customers);
       // 对数据库中的一些数据进行转换
       // 获取销售人员的列表
       let users = await userModel.all();
@@ -32,13 +33,15 @@ const customer = {
         userDict[e.id] = e.name
       })
       customers.map(e => {
-        e.status = statusDict[e.status || '0']
         e.created_at = e.created_at.toLocaleString()
         e.user = userDict[e.userid || '0']
       })
       res.render('admin/clue', {
+        code:200,
         customers,
-        page: 'clue'
+        page: 'clue',
+        customersLength:customersAll.length,
+        current,
       })
     } catch (e) {
       res.locals.error = e;
@@ -60,18 +63,14 @@ const customer = {
       let user = await userModel.select({ id: customer.userid });
       customer.username = user[0] ? user[0].name : '暂未确定';
 
-      // 状态的转换，由数字转换为对应状态
-      customer.status = statusDict[customer.status || '0']
-
       // 拿到对应的线索列表
       let clues = await clueModel.select({ customerid: id });
-      // let clues = await axios.get('http://localhost:3000/api/clue/', {
-      //   method: 'GET',
-      //   params: { id }
-      // })
 
       // 时间格式的转换
       customer.created_at = customer.created_at.toLocaleString()
+      
+      // 拿到销售员列表
+      let salers = await userModel.select({ role: "saler" })
 
       clues.map(e => e.created_at = e.created_at.toLocaleString())
 
@@ -80,6 +79,7 @@ const customer = {
         clueInfo: req.params.id,
         clue_list: clues,
         customer,
+        salers
       })
     } catch (e) {
       res.locals.error = e;
@@ -109,9 +109,11 @@ const customer = {
   },
   update: async function (req, res, next) {
     let id = req.body.id;
+    let status = req.body.status;
+    let userid = req.body.userid;
     let remark = req.body.remark;
     try {
-      const customer = await customerModel.update(id, { remark })
+      const customer = await customerModel.update(id, { status,userid,remark })
       console.log(typeof customer);
       if (customer) {
         res.json({ code: 200, data: customer })

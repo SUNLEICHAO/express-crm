@@ -49,7 +49,7 @@
     }
 
     .backend-title{
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
   </style>
@@ -59,19 +59,20 @@
 <body>
   <header class="page-header">
     {% block headerLeft %}
-    <div class="header-left"> 
-      <div class="header-logo"></div>
-      <div class="header-title">
-        <div class="header-title__main">Mercedes-Benz</div>
-        <div class="header-title__sub">The best or nothing.</div>
+      <div class="header-left"> 
+        <div class="header-logo"></div>
+        <div class="header-title">
+          <div class="header-title__main">Mercedes-Benz</div>
+          <div class="header-title__sub">The best or nothing.</div>
+        </div>
       </div>
-    </div>
     {% endblock %}
+
     
     {% block headerRight %}
     <div class="header-right"> 
-      <!-- {{user}} -->
       <div class="header-user">{{userInfo.name}}</div>
+      <div class="header-role">({{ userInfo.role|roleMap }})</div>
       <div class="header-quit">退出</div>
     </div>
     {% endblock %}
@@ -80,12 +81,16 @@
 
   <div class="page-body">
     <div class="backend-section">
-      <div class="backend-left">
-        <div class="nav-list">
-          <div class="nav-item active user" data-id="1" name="user">人员管理</div>
-          <div class="nav-item clue" data-id="2" name="clue">线索管理</div>
+      {# {% if userInfo.role === "admin" %} #}
+        <div class="backend-left">
+          <div class="nav-list">
+            <div class="nav-item active user" data-id="1" name="user">人员管理</div>
+            <div class="nav-item role" data-id="2" name="role">角色管理</div>
+            <div class="nav-item clue" data-id="3" name="clue">线索管理</div>
+          </div>
         </div>
-      </div>
+      {# {% endif %} #}
+
       {% block backendRight %}
       {% endblock %}
 

@@ -1,0 +1,117 @@
+{% extends './layoutBackend.njk' %}
+
+{% block style %}
+<link rel="stylesheet" href="/stylesheets/tableShow.css">
+
+<style>
+  .backend-right{
+    width:800px;
+  }
+    #backend-add{
+    color: green;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: right;
+  }
+
+  {# 弹窗 #}
+  .popup {
+    position: fixed;
+    top:0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .4);
+  }
+
+  .popup-content {
+    width: 200px;
+    height: 200px;
+    background-color: #fff;
+  }
+
+  .popup.active {
+    display: flex;
+  }
+</style>
+{% endblock %}
+
+{% block backendRight %}
+<div class="backend-right">
+  <div class="backend-title">角色管理</div>
+  <div id="backend-add">[新增角色]</div>
+  <table class="backend-table">
+    <thead>
+      <tr>
+        <th>角色id</th>
+        <th>角色名称</th>
+        <th>描述</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for role in roles %}
+        <tr id="{{ customer.id }}">
+          <td>{{ role.id }}</td>
+          <td>{{ role.role }}</td>
+          <td>暂空</td>
+          {# <td>{{ role.desc }}</td> #}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="popup">
+  <div class="popup-content">
+    <input type="role" id="role" name="role" value="" placeholder="请填入角色名称">
+    <input type="desc" id="desc" name="desc" value="" placeholder="请填入对该角色的描述">
+    <button id="popup-submit">提交信息</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+  const rolePage = {
+    init:function(){
+      this.bind()
+    },
+    bind: function(){
+      $('#backend-add').on('click',this.handleAdd)
+
+      $('#popup-submit').on('click',this.handleSubmit)
+    },
+    handleAdd: function(){
+      $('.popup').addClass('active')
+    },
+    handleSubmit:function(){
+      let roleName = $('#role').val()
+      let roleDesc = $('#desc').val()
+      if(!roleName || !roleDesc){
+        alert('请将信息补充完整！')
+        return
+      }
+      console.log(roleName, roleDesc)
+      $.ajax({
+        url: "/api/role",
+        type: "POST",
+        data: { roleName, roleDesc },
+        success: function(data) {
+          if(data.code===200){
+            alert('提交成功~')
+            location.reload()
+          }else{
+            console.log(data)
+          }
+        },
+        errot: function(err){
+          console.log(err)
+        }
+      })
+      $('.popup').removeClass('active')
+    }
+  }
+  rolePage.init()
+</script>
+{% endblock %}

@@ -27,8 +27,23 @@
     margin-bottom: 20px;
   }
 
+  select.clue-status__text,
+  select.clue-stuff__text {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #333;
+    background-color:transparent;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  select.clue-status__text:hover,
+  select.clue-stuff__text:hover{
+    background-color: rgba(232, 232, 232, 1);
+  }
+
   .clue-stuff__text,
-  .clue-statue__text {
+  .clue-status__text {
     font-size: 18px;
     border-bottom: 1px solid #333;
     padding: 10px;
@@ -92,13 +107,23 @@
       <div class="clue-tel">联系电话：{{ customer.phone }}</div>
       <div class="clue-src">线索来源：{{ customer.source }}</div>
       <div class="clue-create">创建时间：{{ customer.created_at }}</div>
-      <div class="clue-statue">
-        <div class="clue-statue__title">用户状态</div>
-        <div class="clue-statue__text">{{ customer.status }}</div>
+      <div class="clue-status">
+        <div class="clue-status__title">用户状态</div>
+
+        <select class="clue-status__text" name="" id="clue-status__text" {% if userInfo.role !== "admin" %}disabled{% endif %}>
+          {% for status in ["1","2","3"] %}
+            <option value="{{status}}" {% if status ==  customer.status %}selected{% endif %}>{{ status | statusMap }}</option>
+          {% endfor %}
+        </select>
+
       </div>
       <div class="clue-stuff">
         <div class="clue-stuff__title">当前分配销售</div>
-        <div class="clue-stuff__text">{{ customer.username }}</div>
+        <select class="clue-stuff__text" name="" id="clue-stuff__text" {% if userInfo.role !== "admin" %}disabled{% endif %}>
+          {% for saler in salers %}
+            <option value="{{saler.id}}" {% if saler.id ==  customer.userid %}selected{% endif %} >{{saler.name}}</option>
+          {% endfor %}
+        </select>
       </div>
       <div class="clue-remark">
         <div class="clue-remark__title">备注</div>
@@ -146,18 +171,17 @@
       $('.clue-add__submit').on('click',this.handleSubmit)
     },
     handleSave:function(e){
+      let status = $('#clue-status__text option:selected').val()
+      var userid=$("#clue-stuff__text option:selected").val()
       let remark = $('#clue-remark__input').val()
-      if(!remark){
-        alert('请填入备注信息！')
-        return
-      }
+      
       $.ajax({
         url: "/api/customer",
         type: "PUT",
-        data: { id:{{ clueInfo }}, remark },
+        data: { id:{{ clueInfo }}, status, userid, remark },
         success: function(data) {
           if(data.code===200){
-            alert('备注修改成功~')
+            alert('保存成功~')
             location.reload()
           }else{
             console.log(data)

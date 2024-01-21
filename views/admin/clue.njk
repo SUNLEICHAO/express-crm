@@ -7,6 +7,30 @@
   .backend-right{
     flex:1;
   }
+
+  .paginer {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .paginer>div {
+    width: 80px;
+    line-height: 40px;
+    text-align: center;
+    background-color: #eee;
+    cursor: pointer;
+  }
+
+  .paginer>div:hover {
+    background-color: #ccc;
+  }
+
+  .paginer>div.forbi {
+    background-color: #ccc;
+    cursor: auto
+  }
 </style>
 {% endblock %}
 
@@ -33,26 +57,47 @@
           <td>{{ customer.source }}</td>
           <td>{{ customer.created_at }}</td>
           <td>{{ customer.user }}</td>
-          <td>{{ customer.status }}</td>
-          <td class="operation">操作</td>
+          <td>{{ customer.status| statusMap }}</td>
+          <td class="operation">详细信息</td>
         </tr>
       {% endfor %}
-
     </tbody>
   </table>
+  <div class="paginer">
+    <div class="paginer-prev forbi">上一页</div>
+    <div class="paginer-next">下一页</div>
+  </div>
 </div>
 {% endblock %}
   
 {% block js %}
 <script>
   const cluePage = {
-    init:function(){
+    data:{
+      //每页几行
+      pageLimit: 5,
+      // 共几页
+      pages: 0,
+      current: 1,
+    },
+    init: function(){
       this.bind()
+      this.data.pages = Math.ceil({{customersLength}}/this.data.pageLimit);
+      this.data.current = {{current or 1}};
+      this.showChange()
+      {# console.log(typeof {{customersLength}}) #}
+      {# console.log(this.data.pages) #}
+      {# console.log(this.data.pageLimit) #}
     },
     bind:function(){
       // 操作按钮的事件绑定
       let backendTable = document.getElementsByClassName("backend-table")[0]
       this.onEventListener(backendTable, 'click', "operation", this.openClueDetail)
+
+      {# $('.paginer-show').html(current) #}
+      
+      $('.paginer-prev').on('click', this.handlePrev)
+      $('.paginer-next').on('click', this.handleNext)
     },
     onEventListener: function (parentNode, action, childClassName, callback) {
       parentNode.addEventListener(action, (e) => {
@@ -65,6 +110,35 @@
       let id = e.target.parentNode.getAttribute('id');
       location.href = "/admin/clue/" + id;
     },
+
+    showChange: function(){
+      $('.paginer-prev').removeClass("forbi")
+      $('.paginer-next').removeClass("forbi")
+      if (cluePage.data.current == 1) {
+        $('.paginer-prev').addClass("forbi")
+      } else if (cluePage.data.current == this.data.pages) {
+        $('.paginer-next').addClass("forbi")
+      }
+      {# $('.paginer-show').html(cluePage.data.current) #}
+    },
+
+    handlePrev:function(){
+      if (cluePage.data.current <= 1) {
+        return
+      }
+      cluePage.data.current -= 1
+      cluePage.showChange()
+      window.location.href=`/admin/clue?current=${cluePage.data.current}&limit=${cluePage.data.pageLimit}`
+    },
+
+    handleNext: function(){
+      if (cluePage.data.current >= cluePage.data.pages) {
+        return
+      }
+      cluePage.data.current += 1
+      cluePage.showChange()
+      window.location.href=`/admin/clue?current=${cluePage.data.current}&limit=${cluePage.data.pageLimit}`
+    }
   }
   cluePage.init()
 </script>
