@@ -7,7 +7,7 @@ exports.up = function (knex) {
     // 角色表
     .createTable('roles', function (table) {
       table.increments("id");
-      table.string('role', 255);
+      table.string('name', 255);
       table.string('desc', 255);
       table.timestamp('created_at').defaultTo(knex.fn.now())
       table.timestamp('updated_at').defaultTo(knex.fn.now())

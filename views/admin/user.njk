@@ -34,7 +34,7 @@
         <tr id="{{user.id}}">
           <td>{{ user.name }}</td>
           <td>{{ user.phone }}</td>
-          <td>{{ user.role }}</td>
+          <td>{{ userRoleList[user.id] or '待更新角色'  }}</td>
           <td class="operation">编辑</td>
         </tr>
       {% endfor %}

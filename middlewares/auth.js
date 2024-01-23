@@ -1,3 +1,6 @@
+const rolePermissionModelClass = require('../models/rolePermissionModel')
+const rolePermissionModel = new rolePermissionModelClass();
+
 const JWT = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -6,7 +9,6 @@ const auth = {
   loginAuth: function (req, res, next) {
     // 生成isLogin
     res.locals.isLogin = false;
-    res.locals.userId = {};
     let token = req.cookies.web_token;
     if (token) {
       JWT.verify(token, JWT_SECRET, function (err, decoded) {
@@ -15,7 +17,9 @@ const auth = {
           res.locals.userInfo = {
             id: decoded.user_id,
             name: decoded.user_name,
-            role: decoded.user_role
+            roleId: decoded.user_roleId,
+            roleName: decoded.user_roleName,
+            rolePermissions: decoded.user_permissions,
           }
           next();
         } else {
@@ -29,25 +33,30 @@ const auth = {
 
   // 判断角色有无访问权限
   roleAuth: function (req, res, next) {
-    // 生成isLogin
-    let isLogin = res.locals.isLogin;
-    // 可能多此一举
-    if (!isLogin) {
-      next();
-      return
-    } else {
-      // 若不是管理员，无权访问
-      let role = res.locals.userInfo.role;
-      if (req.originalUrl.indexOf('clue') === -1) {
-        console.log('无权访问');
-        // console.log('角色为：', req.originalUrl,'~~~', req.path);
-        res.render('error',{
-          message:'403 无权查看!'
-        })
+    console.log(res.locals);
+    // 该角色可以访问的列表
+    let permissions = res.locals.userInfo.rolePermissions || ''
+    // let permissions = ''
+    let flag = false;
+    for (let permission of permissions) {
+      // 将可以访问的权限列表和将要访问的地址做对比
+      // 在将要访问的网站字符串中，遍历查找权限列表，如果列表中有符合的，则通过
+      if (req.originalUrl.indexOf(permission) !== -1) {
+        flag = true
       }
-      next();
+    }
+
+    if (!flag) {
+      res.render('error', {
+        error: {
+          status: 403,
+          stack: '您无权查看!'
+        }
+
+      })
       return
     }
+    next()
   }
 }
 

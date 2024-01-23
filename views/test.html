@@ -18,25 +18,67 @@
 
     .popup-content {
       width: 200px;
-      height: 200px;
+      padding: 20px 30px;
       background-color: #fff;
     }
 
     .popup.active {
       display: flex;
     }
+
+    .popup-content input {
+      height: 20px;
+      padding: 8px;
+      outline: none;
+      border: none;
+      border-bottom: 1px solid #000;
+    }
+
+    .popup-content .submit {
+      width: 100px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .popup-content__perm {
+      margin: 10px 0;
+    }
+
+    .perm-checkboxs label {
+      display: block;
+      margin-left: 20px;
+    }
   </style>
 
 </head>
 
 <body>
+  <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+
   <div class="popup active">
     <div class="popup-content">
       <input type="role" id="role" name="role" value="" placeholder="请填入角色名称">
       <input type="desc" id="desc" name="desc" value="" placeholder="请填入对该角色的描述">
+      <div class="popup-content__perm">
+        <div>权限选择：</div>
+        <div class="perm-checkboxs">
+          <label><input type="checkbox" name="perm" value="1">用户管理</label>
+          <label><input type="checkbox" name="perm" value="2">线索查看</label>
+        </div>
+      </div>
       <button class="submit">提交信息</button>
     </div>
   </div>
+
+  <script>
+    $('.submit').on('click', function () {
+      let a = $('input[name="perm"]:checked').each(function () {
+        console.log($(this).val());
+      });
+      let permission = 1
+      $('input[name="perm"][value=permission]').prop("checked", true)
+    })
+  </script>
 </body>
 
 </html>

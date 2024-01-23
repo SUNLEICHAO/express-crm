@@ -49,9 +49,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // 问题，为什么中间件的位置要在路由前面
 app.use(auth.loginAuth)
-// app.use(auth.roleAuth)
 
-app.use('/', indexRouter);
+app.use('/',indexRouter);
 app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler

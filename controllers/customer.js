@@ -23,7 +23,7 @@ const customer = {
       let limit = req.query.limit||5
       // 请求部分的数据
       let customers = await customerModel.selectSpan(limit,(current-1)*limit);
-      console.log(customers);
+      // console.log(customers);
       // 对数据库中的一些数据进行转换
       // 获取销售人员的列表
       let users = await userModel.all();

@@ -125,7 +125,8 @@ body>div {
   margin-top: 20px;
 }
 
-.form-table input {
+.form-table input,
+.user-role__text {
   border: none;
   height: 40px;
   padding-left: 20px;
@@ -134,6 +135,9 @@ body>div {
   outline: none;
   font-size: 16px;
   font-weight: 600;
+}
+.user-role__text{
+  color:#ec673e;
 }
 
 /* .form-table input:first-child {

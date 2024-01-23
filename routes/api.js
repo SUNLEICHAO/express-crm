@@ -29,6 +29,12 @@ router.get('/clue', clueController.select) // 线索查找
 router.post('/clue', clueController.insert) // 新增线索
 
 // #4 角色相关
+router.get('/role/:roleId', roleController.showOne) // 查看某一个线索
 router.post('/role', roleController.insert) // 新增线索
+router.delete('/role', roleController.delete) // 删除线索
+router.put('/role', roleController.update) // 更新线索
+
+
+
 
 module.exports = router;

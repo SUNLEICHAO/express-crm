@@ -29,7 +29,6 @@ class base {
   delete(id) {
     return knex(this.table).where('id', id).del()
   }
-
   
 }
 

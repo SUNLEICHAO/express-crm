@@ -5,6 +5,8 @@ const customerController = require('../controllers/customer');
 const userController = require('../controllers/user');
 const roleController = require('../controllers/role');
 
+var auth = require('../middlewares/auth')
+
 /* GET home page. */
 // router.get('/', function (req, res, next) {
 //   // 默认重定向至登录页面
@@ -20,13 +22,13 @@ router.get('/', customerController.signup);
 router.get('/admin/login', userController.login);
 router.get('/admin/logout', userController.logout);
 
-router.get('/admin/user', userController.showAll);
-router.get('/admin/user/:id', userController.showOne);
+router.get('/admin/user', auth.roleAuth, userController.showAll);
+router.get('/admin/user/:id', auth.roleAuth, userController.showOne);
 
 // 角色管理
 router.get('/admin/role', roleController.showAll);
 
-router.get('/admin/clue', customerController.showAll);
+router.get('/admin/clue',  customerController.showAll);
 router.get('/admin/clue/:id', customerController.showOne);
 
 

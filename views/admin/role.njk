@@ -28,13 +28,50 @@
 
   .popup-content {
     width: 200px;
-    height: 200px;
+    padding: 20px 30px;
     background-color: #fff;
   }
 
   .popup.active {
     display: flex;
   }
+
+  .popup-content input {
+    height: 20px;
+    padding: 8px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #000;
+  }
+
+  .popup-content #popup-submit {
+    width: 100px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .popup-content__perm {
+    margin: 10px 0;
+  }
+
+  .perm-checkboxs label {
+    display: block;
+    margin-left: 20px;
+  }
+
+  tbody tr td span{
+    color: blue;
+    cursor:pointer;
+    margin-right: 20px;
+    text-decoration: underline;
+  }
+
+  tbody tr td span:last-child{
+    margin-right: 0px;
+    color:red;
+  }
+
+
 </style>
 {% endblock %}
 
@@ -48,15 +85,19 @@
         <th>角色id</th>
         <th>角色名称</th>
         <th>描述</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
       {% for role in roles %}
-        <tr id="{{ customer.id }}">
+        <tr id="{{ role.id }}">
           <td>{{ role.id }}</td>
-          <td>{{ role.role }}</td>
-          <td>暂空</td>
-          {# <td>{{ role.desc }}</td> #}
+          <td>{{ role.name }}</td>
+          <td>{{ role.desc }}</td>
+          <td>
+            <span class="detail">详情</span> 
+            <span class="delete">删除</span> 
+          </td>
         </tr>
       {% endfor %}
     </tbody>
@@ -66,6 +107,14 @@
   <div class="popup-content">
     <input type="role" id="role" name="role" value="" placeholder="请填入角色名称">
     <input type="desc" id="desc" name="desc" value="" placeholder="请填入对该角色的描述">
+    <div class="popup-content__perm">
+      <div>权限选择：</div>
+      <div class="perm-checkboxs">
+        {% for permission in permissions %}
+          <label><input type="checkbox" name="perm" value="{{permission.id}}">{{permission.permission}}</label>
+        {% endfor %}
+      </div>
+    </div>
     <button id="popup-submit">提交信息</button>
   </div>
 </div>
@@ -74,29 +123,61 @@
 {% block js %}
 <script>
   const rolePage = {
+    data: {
+      currId:"",
+    },
     init:function(){
       this.bind()
     },
     bind: function(){
       $('#backend-add').on('click',this.handleAdd)
+      $('#popup-submit').on('click',this.handleSubmitOrUpdate)
 
-      $('#popup-submit').on('click',this.handleSubmit)
+      $('.delete').on('click',this.handleDelete)
+
+      $('tbody span.detail').on('click',this.handleShowOne)
+
+      {# $('#popup-submit').on('click',this.handleShowOneUpdate) #}
+
+      // 按下esc后取消弹层
+      $(document).keydown(function(event){ 
+        if(event.keyCode == 27){
+          $('.popup').removeClass('active')
+        }
+      });
     },
     handleAdd: function(){
       $('.popup').addClass('active')
+      $('#role').val('')
+      $('#desc').val('')
+      $(`input[name="perm"]`).prop("checked",false)
+      rolePage.data.currId = '';
     },
-    handleSubmit:function(){
+
+    handleSubmitOrUpdate: function(){
+      if (rolePage.data.currId){
+        rolePage.handleShowOneSubmit()
+      } else {
+        rolePage.handleAddSubmit()
+      }
+    },
+    handleAddSubmit:function(){
       let roleName = $('#role').val()
       let roleDesc = $('#desc').val()
+      let permissionsList = []
+      $('input[name="perm"]:checked').each(function(){
+        permissionsList.push($(this).val())
+      });
+
       if(!roleName || !roleDesc){
         alert('请将信息补充完整！')
         return
       }
-      console.log(roleName, roleDesc)
+      console.log(roleName, roleDesc ,'权限列表~', permissionsList)
       $.ajax({
         url: "/api/role",
         type: "POST",
-        data: { roleName, roleDesc },
+        data: { roleName, roleDesc, 'permissionsList':  JSON.stringify(permissionsList) },
         success: function(data) {
           if(data.code===200){
             alert('提交成功~')
@@ -110,6 +191,87 @@
         }
       })
       $('.popup').removeClass('active')
+    },
+    handleDelete:function(){
+      let roleId = $(this).parent().parent().prop('id')
+      console.log(roleId)
+      {# 从角色库中删除，从用户-角色表中删除，从角色-权限表中删除 #}
+      $.ajax({
+        url: "/api/role",
+        type: "DELETE",
+        data: { roleId },
+        success: function(data) {
+          if(data.code===200){
+            alert('删除成功！')
+            location.reload()
+          }else{
+            console.log(data)
+          }
+        },
+        errot: function(err){
+          console.log(err)
+        }
+      })
+    },
+    handleShowOne: function(){
+      let roleId = $(this).parent().parent().prop('id');
+      rolePage.data.currId = roleId
+      $('.popup').addClass('active')
+      $.ajax({
+        url: "/api/role/" + roleId,
+        type: "GET",
+        success: function(data) {
+          if(data.code===200){
+            $('#role').val(data.data.role.name)
+            $('#desc').val(data.data.role.desc)
+            $(`input[name="perm"]`).prop("checked",false)
+            let permissions = data.data.permissions
+            for (permission of permissions) {
+              $(`input[name="perm"][value=${permission|0}]`).prop("checked",true)
+            }
+          }else{
+            console.log(data)
+          }
+        },
+        errot: function(err){
+          console.log(err)
+        }
+      })
+      console.log(roleId)
+    },
+    handleShowOneSubmit:function(){
+      {# 问题，这里的this，失效了，不再是当前点击的元素 #}
+      {# let roleId = $(this).parent().parent().prop('id'); #}
+      let roleId = rolePage.data.currId;
+      let roleName = $('#role').val()
+      let roleDesc = $('#desc').val()
+      let permissionsList = []
+      $('input[name="perm"]:checked').each(function(){
+        permissionsList.push($(this).val())
+      });
+      {# console.log(roleId,roleName, roleDesc ,'权限列表~', permissionsList) #}
+      if(!roleName || !roleDesc){
+        alert('请将信息补充完整！')
+        return
+      }
+
+      $.ajax({
+        url: "/api/role",
+        type: "PUT",
+        data: {roleId,roleName, roleDesc, permissionsList:JSON.stringify(permissionsList)},
+        success: function(data) {
+          if(data.code===200){
+            alert('修改成功~')
+            location.reload()
+
+          }else{
+            console.log(data)
+          }
+        },
+        errot: function(err){
+          console.log(err)
+        }
+      })
     }
   }
   rolePage.init()

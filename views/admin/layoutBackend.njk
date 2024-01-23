@@ -72,7 +72,7 @@
     {% block headerRight %}
     <div class="header-right"> 
       <div class="header-user">{{userInfo.name}}</div>
-      <div class="header-role">({{ userInfo.role|roleMap }})</div>
+      <div class="header-role">({{ userInfo.roleName }})</div>
       <div class="header-quit">退出</div>
     </div>
     {% endblock %}
@@ -150,6 +150,5 @@
     }
     PAGE.init()
   </script>
-  
 </body>
 </html>

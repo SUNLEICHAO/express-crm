@@ -8,6 +8,7 @@
   .backend-title{
     cursor:pointer;
   }
+  
 </style>
 {% endblock %}
 
@@ -28,8 +29,8 @@
 
     <select class="user-role__text" name="" id="user-role__text">
       {% for role in roles %}
-        {# <option value="{{role.id}}" {% if saler.id ==  customer.userid %}selected{% endif %} >{{saler.name}}</option> #}
-        <option value="{{role.id}}">{{role.role}}</option>
+        <option value="{{role.id}}" {% if userRole.roleId ==  role.id %}selected{% endif %} >{{role.name}}</option>
+        {# <option value="{{role.id}}">{{role.name}}</option> #}
       {% endfor %}
     </select>
 
@@ -56,15 +57,16 @@
       $('#form-submit__insert').on('click',this.handleInsert)
 
       $('.backend-title').on('click',()=>{location.href = "/admin/user/"})
-      console.log({{roles}})
+      {# console.log({{roles}}) #}
     },
     handleSave:function(e){
       let name = $('#name').val()
       let tel = $('#tel').val()
       let password = $('#password').val()
-      let role = $('#role').val()
-      if(!name || !tel || !password || !role){
-        alert('请补充参数1！！')
+      let roleId = $("#user-role__text option:selected").val();
+      {# console.log(name,tel,password,role) #}
+      if(!name || !tel || !password || !roleId){
+        alert('请补充参数23！！')
         return
       }
       // 发送申请时申请出id
@@ -73,9 +75,9 @@
       $.ajax({
         url: "/api/user",
         type: "PUT",
-        data: { id: {{userId}}, name, tel, password, role },
+        data: { userId: {{userId}}, name, tel, password, roleId },
         success: function(data) {
-          if(data.code===200){
+          if(data.code === 200){
             alert('修改成功~')
             location.reload()
           }else{
@@ -88,19 +90,18 @@
       })
     },
     handleInsert: function(){
-      console.log('d')
       let name = $('#name').val()
       let tel = $('#tel').val()
       let password = $('#password').val()
-      let role = $('#role').val()
-      if(!name || !tel || !password || !role){
-        alert('请补充参数1！！')
+      let roleId = $("#user-role__text option:selected").val();
+      if(!name || !tel || !password || !roleId){
+        alert('请补充参数！！')
         return
       }
       $.ajax({
         url: "/api/user",
         type: "POST",
-        data: { name, tel, password, role },
+        data: { name, tel, password, roleId },
         success: function(data) {
           if(data.code===200){
             alert('修改成功~')
