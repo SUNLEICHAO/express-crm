@@ -81,7 +81,7 @@
 
   <div class="page-body">
     <div class="backend-section">
-      {# {% if userInfo.role === "admin" %} #}
+      {# {% if userInfo.roleName === "管理员" %} #}
         <div class="backend-left">
           <div class="nav-list">
             <div class="nav-item active user" data-id="1" name="user">人员管理</div>
@@ -122,8 +122,26 @@
         // 跳转功能 
         this.navRedirect();
 
-        this.handleQuit();        
+        this.handleQuit();
+
+        // 根据角色的权限设计导航栏
+        this.authNavigator()
       },
+      
+      authNavigator: function(){
+        let permissions = {{ userInfo.rolePermissions | dump | safe }}
+        
+        if(!permissions.includes('user')){
+          $('.nav-item.user').css('display','none')
+          $('.nav-item.role').css('display','none')
+        }
+
+        if(!permissions.includes('clue')){
+          $('.nav-item.clue').css('display','none')
+        }
+
+      },
+
       activeToggle:function(){
         let navItems = document.getElementsByClassName('nav-item')
         for(let i = 0;i<navItems.length;i++){
@@ -133,6 +151,7 @@
           }
         }
       },
+
       navRedirect:function(){
         let navItems = document.getElementsByClassName('nav-item')
         for(let i = 0;i<navItems.length;i++){
@@ -141,12 +160,14 @@
           }
         }
       },
+
       handleQuit: function() {
         let headerQuit = document.getElementsByClassName('header-quit')[0]
         headerQuit.onclick = function(){
           location.href = "/admin/logout";
         }
       }
+
     }
     PAGE.init()
   </script>

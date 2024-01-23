@@ -35,6 +35,4 @@ router.delete('/role', roleController.delete) // 删除线索
 router.put('/role', roleController.update) // 更新线索
 
 
-
-
 module.exports = router;

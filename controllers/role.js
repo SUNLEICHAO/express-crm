@@ -27,7 +27,6 @@ const role = {
   },
   showOne: async function (req, res, next) {
     const id = req.params.roleId
-    console.log('id：', id);
     try {
       const role = await roleModel.all().where({ id }).first();
       if (!role) {
@@ -48,7 +47,6 @@ const role = {
       console.log(e);
     }
   },
-
 
 
   // 以下为api
@@ -74,11 +72,9 @@ const role = {
   },
   delete: async function (req, res, next) {
     let roleId = req.body.roleId;
-    console.log(roleId);
     try {
       // 删除用户-角色表中所有该角色
       let userRole = await userRoleModel.all().where('roleId', roleId).delete()
-      console.log(userRole);
       // 删除角色表中所有该角色
       let role = await roleModel.all().where('id', roleId).delete()
       // 删除角色-权限表中所有该角色

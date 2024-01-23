@@ -62,20 +62,10 @@ const user = {
 
     let userId = req.params.id;
     try {
-      const users = await userModel.select({ id: userId });
+      const user = await userModel.select({ id: userId }).first();
       const roles = await roleModel.all();
       // 通过用户的id，在用户-角色表中找到其对应的角色
-      const userRoles = await userModel.selectRoleByUserId({ userId })
-      // console.log(userRoles);
-      // const roleIds = await userRoleModel.select({ id })
-      // let roleId = roleIds[0];
-      // // 如果表中存在对应的角色id，则找到该id对应的角色名称
-      // if (roleId) {
-      //   roleName = await roleModel.select({ id });
-      // }
-
-      // 向页面中发送消息
-      const user = users[0]
+      const userRole = await userModel.selectRoleByUserId({ userId }).first()
 
       // 除了顾客的信息，还需要发送过来该用户对应的clue表格
       res.render('admin/userDetail', {
@@ -83,7 +73,7 @@ const user = {
         userId: req.params.id,
         roles,
         user,
-        userRole: userRoles[0]
+        userRole: userRole
       })
     } catch (e) {
       res.locals.error = e;
@@ -96,6 +86,7 @@ const user = {
       res.redirect('/admin/clue')
       return
     }
+
     try {
       res.render('admin/login', res.locals)
     } catch (e) {
@@ -138,11 +129,16 @@ const user = {
         let roles = await roleModel.select({ id: roleId });
         roleName = roles[0].name
         let rolePermissions = await rolePermissionModel.select({ roleId: roleId });
-        // permissions = 
         for(let rolePermission of rolePermissions){
           let permission = await  permissionModel.select({id: rolePermission.permissionId}).first()
           permissions.push(permission.permission)
         }
+      }
+
+      // 如果没有任何权限
+      if(!permissions.length){
+        res.json({ code: 403 })
+        return
       }
       // 生成token
       let token = JWT.sign({ 
@@ -157,7 +153,6 @@ const user = {
       // // 将其设置在cookie中
       res.cookie('web_token', token, { maxAge: 30 * 24 * 60 * 60 });
       res.json({ code: 200, message: '登录成功！', data: { token: token } });
-      // next()
     } catch (e) {
       res.json({ code: 100, data: e })
     }
@@ -181,12 +176,10 @@ const user = {
     let tel = req.body.tel;
     let password = req.body.password;
     let roleId = req.body.roleId;
-    console.log('传递过来了');
     try {
       const user = await userModel.update(userId, { name, phone: tel, password });
       // 查找数据库，没有的话就添加，有的话
       const userRoleExit = await userRoleModel.select({ userId });
-      console.log(userRoleExit[0]);
       if (!userRoleExit.length) {
         // 原来没有，就添加
         const userRole = await userRoleModel.insert({ userId, roleId });

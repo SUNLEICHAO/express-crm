@@ -23,7 +23,6 @@
   }
 
   .login-section .login-title {
-    /* line-height: 30px; */
     font-size: 36px;
     text-align: center;
   }
@@ -71,6 +70,8 @@
         success: function (data) {
           if (data.code === 200) {
             location.reload()
+          } else if (data.code === 403){
+            alert('当前账号没有访问权限！')
           } else {
             alert('密码输入错误或账户不存在')
             console.log(data);

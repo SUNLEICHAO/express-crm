@@ -7,6 +7,8 @@ const userModel = new userModelClass();
 const clueModelClass = require('../models/clueModel')
 const clueModel = new clueModelClass();
 
+const userRoleModelClass = require('../models/userRoleModel')
+const userRoleModel = new userRoleModelClass();
 
 const customer = {
   showAll: async function (req, res, next) {
@@ -17,13 +19,12 @@ const customer = {
     try {
       // 请求全部的数据
       let customersAll = await customerModel.all();
-      
+
       // 获取要请求的页数
-      let current = req.query.current||1
-      let limit = req.query.limit||5
+      let current = req.query.current || 1
+      let limit = req.query.limit || 5
       // 请求部分的数据
-      let customers = await customerModel.selectSpan(limit,(current-1)*limit);
-      // console.log(customers);
+      let customers = await customerModel.selectSpan(limit, (current - 1) * limit);
       // 对数据库中的一些数据进行转换
       // 获取销售人员的列表
       let users = await userModel.all();
@@ -37,10 +38,10 @@ const customer = {
         e.user = userDict[e.userid || '0']
       })
       res.render('admin/clue', {
-        code:200,
+        code: 200,
         customers,
         page: 'clue',
-        customersLength:customersAll.length,
+        customersLength: customersAll.length,
         current,
       })
     } catch (e) {
@@ -68,9 +69,9 @@ const customer = {
 
       // 时间格式的转换
       customer.created_at = customer.created_at.toLocaleString()
-      
-      // 拿到销售员列表
-      let salers = await userModel.select({ role: "saler" })
+
+      let salerIds = await userRoleModel.select({ roleId: "2" }).pluck('userId')
+      let salers = await userModel.all().whereIn('id',salerIds)
 
       clues.map(e => e.created_at = e.created_at.toLocaleString())
 
@@ -90,6 +91,7 @@ const customer = {
     // 将网址传递的参数拿到，并传递到模板中（模板拿到，发送ajax时带上该参数）
     res.render('signup', { utf: req.query.utf })
   },
+
 
   // 以下为api接口
   insert: async function (req, res, next) {
@@ -113,8 +115,7 @@ const customer = {
     let userid = req.body.userid;
     let remark = req.body.remark;
     try {
-      const customer = await customerModel.update(id, { status,userid,remark })
-      console.log(typeof customer);
+      const customer = await customerModel.update(id, { status, userid, remark })
       if (customer) {
         res.json({ code: 200, data: customer })
       } else {

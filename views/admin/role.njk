@@ -70,8 +70,6 @@
     margin-right: 0px;
     color:red;
   }
-
-
 </style>
 {% endblock %}
 
@@ -137,8 +135,6 @@
 
       $('tbody span.detail').on('click',this.handleShowOne)
 
-      {# $('#popup-submit').on('click',this.handleShowOneUpdate) #}
-
       // 按下esc后取消弹层
       $(document).keydown(function(event){ 
         if(event.keyCode == 27){
@@ -161,6 +157,7 @@
         rolePage.handleAddSubmit()
       }
     },
+
     handleAddSubmit:function(){
       let roleName = $('#role').val()
       let roleDesc = $('#desc').val()
@@ -173,7 +170,6 @@
         alert('请将信息补充完整！')
         return
       }
-      console.log(roleName, roleDesc ,'权限列表~', permissionsList)
       $.ajax({
         url: "/api/role",
         type: "POST",
@@ -192,9 +188,9 @@
       })
       $('.popup').removeClass('active')
     },
+
     handleDelete:function(){
       let roleId = $(this).parent().parent().prop('id')
-      console.log(roleId)
       {# 从角色库中删除，从用户-角色表中删除，从角色-权限表中删除 #}
       $.ajax({
         url: "/api/role",
@@ -213,6 +209,7 @@
         }
       })
     },
+
     handleShowOne: function(){
       let roleId = $(this).parent().parent().prop('id');
       rolePage.data.currId = roleId
@@ -237,8 +234,8 @@
           console.log(err)
         }
       })
-      console.log(roleId)
     },
+
     handleShowOneSubmit:function(){
       {# 问题，这里的this，失效了，不再是当前点击的元素 #}
       {# let roleId = $(this).parent().parent().prop('id'); #}
@@ -249,7 +246,6 @@
       $('input[name="perm"]:checked').each(function(){
         permissionsList.push($(this).val())
       });
-      {# console.log(roleId,roleName, roleDesc ,'权限列表~', permissionsList) #}
       if(!roleName || !roleDesc){
         alert('请将信息补充完整！')
         return

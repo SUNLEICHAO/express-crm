@@ -25,7 +25,6 @@ const clue = {
       return
     }
     try {
-      console.log('sss');
       const clue = await clueModel.insert({ customerid,content });
       res.json({ code: 200, data: clue })
     } catch (e) {

@@ -5,14 +5,6 @@ class UserRoleModel extends BaseModel {
     super(props)
   }
 
-  // selectByUserId(userId, params) {
-  //   return knex(this.table).where('userId', userId)
-  // }
-
-  // updataByUserId(userId, params) {
-  //   return knex(this.table).where('userId', userId).update(params)
-  // }
-
 }
 
 module.exports = UserRoleModel

@@ -57,7 +57,6 @@
       $('#form-submit__insert').on('click',this.handleInsert)
 
       $('.backend-title').on('click',()=>{location.href = "/admin/user/"})
-      {# console.log({{roles}}) #}
     },
     handleSave:function(e){
       let name = $('#name').val()
@@ -71,7 +70,6 @@
       }
       // 发送申请时申请出id
       //location.href = "/admin/user/" + id;
-      // console.log(name, tel, password, role)
       $.ajax({
         url: "/api/user",
         type: "PUT",

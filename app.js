@@ -30,7 +30,7 @@ nunjucks.configure('views', {
     "3": '暂无购买意愿'
   }
   return statusList[status || "0"]
-}).addFilter('roleMap', function(role) { // 添加自定义过滤器
+}).addFilter('roleMap', function(role) { // 添加自定义过滤器；添加RABC系统后该过滤器无用
   let roleList = {
     "0": '未知身份',
     "admin": '管理员',

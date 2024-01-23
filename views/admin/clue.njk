@@ -80,25 +80,24 @@
       pages: 0,
       current: 1,
     },
+
     init: function(){
       this.bind()
       this.data.pages = Math.ceil({{customersLength}}/this.data.pageLimit);
       this.data.current = {{current or 1}};
       this.showChange()
-      {# console.log(typeof {{customersLength}}) #}
-      {# console.log(this.data.pages) #}
-      {# console.log(this.data.pageLimit) #}
     },
+
     bind:function(){
       // 操作按钮的事件绑定
       let backendTable = document.getElementsByClassName("backend-table")[0]
       this.onEventListener(backendTable, 'click', "operation", this.openClueDetail)
 
-      {# $('.paginer-show').html(current) #}
-      
       $('.paginer-prev').on('click', this.handlePrev)
       $('.paginer-next').on('click', this.handleNext)
     },
+    
+    {# jQuery可以实现委托绑定功能，这里暂时保留代码 #}
     onEventListener: function (parentNode, action, childClassName, callback) {
       parentNode.addEventListener(action, (e) => {
         if (e.target.className.indexOf(childClassName) !== -1) {
@@ -119,7 +118,6 @@
       } else if (cluePage.data.current == this.data.pages) {
         $('.paginer-next').addClass("forbi")
       }
-      {# $('.paginer-show').html(cluePage.data.current) #}
     },
 
     handlePrev:function(){

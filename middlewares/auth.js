@@ -21,6 +21,9 @@ const auth = {
             roleName: decoded.user_roleName,
             rolePermissions: decoded.user_permissions,
           }
+          if(!decoded.user_permissions){
+            res.end('403,您无权访问')
+          }
           next();
         } else {
           next();
@@ -33,11 +36,17 @@ const auth = {
 
   // 判断角色有无访问权限
   roleAuth: function (req, res, next) {
-    console.log(res.locals);
+
     // 该角色可以访问的列表
+    if(!res.locals.isLogin){
+      next()
+      return
+    }
+
     let permissions = res.locals.userInfo.rolePermissions || ''
-    // let permissions = ''
     let flag = false;
+    if(permissions.includes('user')) permissions.push('role')
+    // console.log(permissions);
     for (let permission of permissions) {
       // 将可以访问的权限列表和将要访问的地址做对比
       // 在将要访问的网站字符串中，遍历查找权限列表，如果列表中有符合的，则通过
@@ -52,7 +61,6 @@ const auth = {
           status: 403,
           stack: '您无权查看!'
         }
-
       })
       return
     }
