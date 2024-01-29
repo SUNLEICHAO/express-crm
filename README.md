@@ -1,4 +1,4 @@
-# CRM 客户管理系统(更新一波1.25)
+# CRM 客户管理系统
 
 > CRM, 销售机会信息管理(Customer Relationship Management)
 >
@@ -9,6 +9,8 @@
 > v1.2，部分RABC实现
 >
 > v1.3，代码优化
+>
+> v1.4，若干修改，包括表中属性名更改，userId改为user_id；判断权限的方式；修改所调用knex的api。
 
 
 
@@ -20,12 +22,22 @@
    npm install
    ```
 
-2. 启动数据库或数据库集成环境（mamp），有需要也可启动数据库管理工具（tableplus）
+2. 启动数据库服务
 
-3. 新增`.env`文件，根据`.env-example`文件提示在文件中补充信息
+   启动数据库服务，如MySql或运行数据库集成环境（如mamp），有需要也可启动数据库管理工具（tableplus）
+
+3. 确保已安装好需要的npm包
 
    ```
-   # 例如
+   # knex用于数据库交互
+   # nodemon用于热更新
+   npm install knex nodemon -g
+   ```
+
+4. 新建`.env`文件
+
+   ```
+   # 根据`.env-example`提示在`.env`中将信息补充完整，如下：
    DB_HOST = "127.0.0.1"
    DB_PORT = "3306"
    DB_NAME = "crmapp"
@@ -33,7 +45,8 @@
    DB_PASSWORD = "root"
    JWT_SECRET = "sea"
    ```
-4. Migrate：数据库中新建表，数据初始化
+
+5. Migrate：数据库中新建表，数据初始化
 
    ``` bash
    # 运行数据库迁移
@@ -44,7 +57,7 @@
    knex seed:run
    ```
 
-5. 项目启动
+6. 项目启动
 
    ``` bash
    npm start
@@ -52,7 +65,7 @@
    npm run dev
    ```
 
-5. 登录信息
+7. 登录信息
 
    管理员角色登录，账号：`13200000001`，密码:`1234`
 
@@ -112,7 +125,10 @@
   location.reload()
   ```
 
-  
+
++ （待解决）权限判断方式，传递参数的方式
++ （已解决）knex的count代替all后`.length`
++ 
 
 **样式问题**
 

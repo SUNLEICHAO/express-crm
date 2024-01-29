@@ -190,12 +190,12 @@
     },
 
     handleDelete:function(){
-      let roleId = $(this).parent().parent().prop('id')
+      let role_id = $(this).parent().parent().prop('id')
       {# 从角色库中删除，从用户-角色表中删除，从角色-权限表中删除 #}
       $.ajax({
         url: "/api/role",
         type: "DELETE",
-        data: { roleId },
+        data: { role_id },
         success: function(data) {
           if(data.code===200){
             alert('删除成功！')
@@ -211,11 +211,11 @@
     },
 
     handleShowOne: function(){
-      let roleId = $(this).parent().parent().prop('id');
-      rolePage.data.currId = roleId
+      let role_id = $(this).parent().parent().prop('id');
+      rolePage.data.currId = role_id
       $('.popup').addClass('active')
       $.ajax({
-        url: "/api/role/" + roleId,
+        url: "/api/role/" + role_id,
         type: "GET",
         success: function(data) {
           if(data.code===200){
@@ -238,8 +238,8 @@
 
     handleShowOneSubmit:function(){
       {# 问题，这里的this，失效了，不再是当前点击的元素 #}
-      {# let roleId = $(this).parent().parent().prop('id'); #}
-      let roleId = rolePage.data.currId;
+      {# let role_id = $(this).parent().parent().prop('id'); #}
+      let role_id = rolePage.data.currId;
       let roleName = $('#role').val()
       let roleDesc = $('#desc').val()
       let permissionsList = []
@@ -254,7 +254,7 @@
       $.ajax({
         url: "/api/role",
         type: "PUT",
-        data: {roleId,roleName, roleDesc, permissionsList:JSON.stringify(permissionsList)},
+        data: {role_id,roleName, roleDesc, permissionsList:JSON.stringify(permissionsList)},
         success: function(data) {
           if(data.code===200){
             alert('修改成功~')

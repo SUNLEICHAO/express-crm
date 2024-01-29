@@ -121,7 +121,7 @@
         <div class="clue-stuff__title">当前分配销售</div>
         <select class="clue-stuff__text" name="" id="clue-stuff__text" {% if userInfo.roleName !== "管理员" %}disabled{% endif %}>
           {% for saler in salers %}
-            <option value="{{saler.id}}" {% if saler.id ==  customer.userid %}selected{% endif %} >{{saler.name}}</option>
+            <option value="{{saler.id}}" {% if saler.id ==  customer.user_id %}selected{% endif %} >{{saler.name}}</option>
           {% endfor %}
         </select>
       </div>
@@ -174,13 +174,13 @@
 
     handleSave:function(e){
       let status = $('#clue-status__text option:selected').val()
-      var userid=$("#clue-stuff__text option:selected").val()
+      var user_id=$("#clue-stuff__text option:selected").val()
       let remark = $('#clue-remark__input').val()
       
       $.ajax({
         url: "/api/customer",
         type: "PUT",
-        data: { id:{{ clueInfo }}, status, userid, remark },
+        data: { id:{{ clueInfo }}, status, user_id, remark },
         success: function(data) {
           if(data.code===200){
             alert('保存成功~')

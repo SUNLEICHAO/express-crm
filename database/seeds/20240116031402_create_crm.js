@@ -18,7 +18,7 @@ exports.seed = async function (knex) {
     { id: 8, name: '图卡', phone: '13200000008', password: '1234' },
   ]);
   await knex('customers').insert([
-    { id: 1, name: '顾客A', phone: '15232000001', source: 'douyin', userid: '3', status: '1', },
+    { id: 1, name: '顾客A', phone: '15232000001', source: 'douyin', user_id: '3', status: '1', },
     { id: 2, name: '顾客B', phone: '15232000002', source: 'meituan', status: '2', },
     { id: 3, name: '顾客C', phone: '15232000003', source: 'douyin', status: '1', },
     { id: 4, name: '顾客D', phone: '15232000004', source: 'meituan', status: '1', },

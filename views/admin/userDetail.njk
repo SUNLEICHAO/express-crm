@@ -23,13 +23,13 @@
     <input type="text" id="password" name="password" value="{{ user.password }}" placeholder="请设置密码">
     {# <select class="role" name="" id="role">
       {% for saler in salers %}
-        <option value="{{saler.id}}" {% if saler.id ==  customer.userid %}selected{% endif %} >{{saler.name}}</option>
+        <option value="{{saler.id}}" {% if saler.id ==  customer.user_id %}selected{% endif %} >{{saler.name}}</option>
       {% endfor %}
     </select> #}
 
     <select class="user-role__text" name="" id="user-role__text">
       {% for role in roles %}
-        <option value="{{role.id}}" {% if userRole.roleId ==  role.id %}selected{% endif %} >{{role.name}}</option>
+        <option value="{{role.id}}" {% if userRole.role_id ==  role.id %}selected{% endif %} >{{role.name}}</option>
         {# <option value="{{role.id}}">{{role.name}}</option> #}
       {% endfor %}
     </select>
@@ -62,9 +62,9 @@
       let name = $('#name').val()
       let tel = $('#tel').val()
       let password = $('#password').val()
-      let roleId = $("#user-role__text option:selected").val();
+      let role_id = $("#user-role__text option:selected").val();
       {# console.log(name,tel,password,role) #}
-      if(!name || !tel || !password || !roleId){
+      if(!name || !tel || !password || !role_id){
         alert('请补充参数23！！')
         return
       }
@@ -73,7 +73,7 @@
       $.ajax({
         url: "/api/user",
         type: "PUT",
-        data: { userId: {{userId}}, name, tel, password, roleId },
+        data: { user_id: {{user_id}}, name, tel, password, role_id },
         success: function(data) {
           if(data.code === 200){
             alert('修改成功~')
@@ -91,15 +91,15 @@
       let name = $('#name').val()
       let tel = $('#tel').val()
       let password = $('#password').val()
-      let roleId = $("#user-role__text option:selected").val();
-      if(!name || !tel || !password || !roleId){
+      let role_id = $("#user-role__text option:selected").val();
+      if(!name || !tel || !password || !role_id){
         alert('请补充参数！！')
         return
       }
       $.ajax({
         url: "/api/user",
         type: "POST",
-        data: { name, tel, password, roleId },
+        data: { name, tel, password, role_id },
         success: function(data) {
           if(data.code===200){
             alert('修改成功~')

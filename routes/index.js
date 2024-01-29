@@ -15,13 +15,13 @@ router.get('/', customerController.signup);
 router.get('/admin/login', userController.login);
 router.get('/admin/logout', userController.logout);
 
-router.get('/admin/user', auth.roleAuth, userController.showAll);
-router.get('/admin/user/:id', auth.roleAuth, userController.showOne);
+router.get('/admin/user', auth.roleAuth2('user'), userController.showAll);
+router.get('/admin/user/:id', auth.roleAuth2('user'), userController.showOne);
 
-router.get('/admin/role',auth.roleAuth, roleController.showAll);
+router.get('/admin/role',auth.roleAuth2('user'), roleController.showAll);
 
-router.get('/admin/clue', auth.roleAuth, customerController.showAll);
-router.get('/admin/clue/:id', auth.roleAuth, customerController.showOne);
+router.get('/admin/clue', auth.roleAuth2('clue'), customerController.showAll);
+router.get('/admin/clue/:id', auth.roleAuth2('clue'), customerController.showOne);
 
 // 测试页面
 router.get('/test', function (req, res, next) {

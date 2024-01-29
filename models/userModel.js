@@ -9,7 +9,7 @@ class UserModel extends BaseModel {
   }
 
   selectRoleByUserId(params) {
-    return knex(this.table).join('user_roles', this.table + '.id', '=', 'user_roles.userId').select().where(params)
+    return knex(this.table).join('user_roles', this.table + '.id', '=', 'user_roles.user_id').select().where(params)
   }
 
 }

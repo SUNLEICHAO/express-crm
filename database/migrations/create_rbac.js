@@ -22,15 +22,15 @@ exports.up = function (knex) {
     // 用户-角色表
     .createTable('user_roles', function (table) {
       table.increments("id");
-      table.string('userId', 255);
-      table.string('roleId', 255);
+      table.string('user_id', 255);
+      table.string('role_id', 255);
       table.timestamp('created_at').defaultTo(knex.fn.now())
       table.timestamp('updated_at').defaultTo(knex.fn.now())
     })
     // 角色-权限表
     .createTable('role_permissions', function (table) {
       table.increments("id");
-      table.string('roleId', 255);
+      table.string('role_id', 255);
       table.string('permissionId', 255);
       table.timestamp('created_at').defaultTo(knex.fn.now())
       table.timestamp('updated_at').defaultTo(knex.fn.now())
