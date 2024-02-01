@@ -17,7 +17,7 @@ const auth = {
           res.locals.userInfo = {
             id: decoded.user_id,
             name: decoded.user_name,
-            roleId: decoded.user_roleId,
+            role_id: decoded.user_role_id,
             roleName: decoded.user_roleName,
             rolePermissions: decoded.user_permissions,
           }
@@ -34,7 +34,7 @@ const auth = {
     next();
   },
 
-  // 判断角色有无访问权限
+  // 判断角色有无访问权限(方式1，待改进)
   roleAuth: function (req, res, next) {
 
     // 该角色可以访问的列表
@@ -65,6 +65,29 @@ const auth = {
       return
     }
     next()
+  },
+  
+  // 方式2，传参形式
+  roleAuth2:function(permission){
+    return function(req, res, next){
+      
+      if(!res.locals.isLogin){
+        next()
+        return
+      }
+
+      let flag = res.locals.userInfo.rolePermissions.includes(permission)
+      if(flag){
+        next()
+      } else {
+        return res.render('error', {
+          error: {
+            status: 403,
+            stack: '您无权查看!'
+          }
+        })
+      }
+    }
   }
 }
 

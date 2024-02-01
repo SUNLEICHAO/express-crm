@@ -26,14 +26,14 @@ const role = {
     }
   },
   showOne: async function (req, res, next) {
-    const id = req.params.roleId
+    const id = req.params.role_id
     try {
       const role = await roleModel.all().where({ id }).first();
       if (!role) {
         res.json({ error_code: 1, message: '不存在' });
         return;
       }
-      const permissions = await rolePermissionModel.all().where({ roleId: id });
+      const permissions = await rolePermissionModel.all().where({ role_id: id });
       permissionsTransform = permissions.map(data => data.permissionId);
       res.json({
         code: 200, data: {
@@ -56,9 +56,9 @@ const role = {
     let permissionsList = JSON.parse(req.body.permissionsList);
     try {
       const roles = await roleModel.insert({ name, desc });
-      let roleId = roles[0]
+      let role_id = roles[0]
       let rolePermissionToInsert = permissionsList.map(e =>
-        ({ roleId, permissionId: e })
+        ({ role_id, permissionId: e })
       )
       await rolePermissionModel.insert(rolePermissionToInsert)
       if (roles.length) {
@@ -71,21 +71,21 @@ const role = {
     }
   },
   delete: async function (req, res, next) {
-    let roleId = req.body.roleId;
+    let role_id = req.body.role_id;
     try {
       // 删除用户-角色表中所有该角色
-      let userRole = await userRoleModel.all().where('roleId', roleId).delete()
+      let userRole = await userRoleModel.all().where('role_id', role_id).delete()
       // 删除角色表中所有该角色
-      let role = await roleModel.all().where('id', roleId).delete()
+      let role = await roleModel.all().where('id', role_id).delete()
       // 删除角色-权限表中所有该角色
-      let rolePermissio = await rolePermissionModel.all().where('roleId', roleId).delete()
+      let rolePermissio = await rolePermissionModel.all().where('role_id', role_id).delete()
       res.json({ code: 200, data: [] })
     } catch (e) {
       console.log(e);
     }
   },
   update: async function (req, res, next) {
-    let id = req.body.roleId;
+    let id = req.body.role_id;
     let name = req.body.roleName;
     let desc = req.body.roleDesc;
     let permissionsList = JSON.parse(req.body.permissionsList);
@@ -94,10 +94,10 @@ const role = {
       await roleModel.update(id, { name, desc })
 
       // 删除原有的所有权限，添加新的权限
-      await rolePermissionModel.all().where('roleId', id).delete()
+      await rolePermissionModel.all().where('role_id', id).delete()
 
       let rolePermissionToInsert = permissionsList.map(e =>
-        ({ roleId:id, permissionId: e })
+        ({ role_id:id, permissionId: e })
       )
       await rolePermissionModel.insert(rolePermissionToInsert)
 

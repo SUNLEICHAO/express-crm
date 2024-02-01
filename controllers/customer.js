@@ -18,30 +18,38 @@ const customer = {
     }
     try {
       // 请求全部的数据
-      let customersAll = await customerModel.all();
+      // let customersAll = await customerModel.all();
+      // 直接请求数据
+      let customersCount = await customerModel.select({}).count('* as count').first();
 
       // 获取要请求的页数
       let current = req.query.current || 1
       let limit = req.query.limit || 5
       // 请求部分的数据
       let customers = await customerModel.selectSpan(limit, (current - 1) * limit);
-      // 对数据库中的一些数据进行转换
-      // 获取销售人员的列表
-      let users = await userModel.all();
-      // id-销售对应的表
+      
+      // 得到该页中所需展示的 user_id
+      let user_ids = [];
+      customers.forEach(e=>{
+        e.user_id && user_ids.push(e.user_id)
+      })
+      // 根据id在user中找到匹配的user，即获取销售人员的列表
+      let tarUsers = await userModel.all().whereIn('id',user_ids).select('id','name');
+      // 销售人员的hash表，根据顾客的user_id属性在userDict中获得销售人员名字
       let userDict = { "0": '未分配' };
-      users.forEach(e => {
+      tarUsers.forEach(e => {
         userDict[e.id] = e.name
       })
+      // customers列表中：时间和销售展示
       customers.map(e => {
         e.created_at = e.created_at.toLocaleString()
-        e.user = userDict[e.userid || '0']
+        e.user = userDict[e.user_id || '0']
       })
       res.render('admin/clue', {
         code: 200,
         customers,
         page: 'clue',
-        customersLength: customersAll.length,
+        customersLength: customersCount.count,
         current,
       })
     } catch (e) {
@@ -61,7 +69,7 @@ const customer = {
       const customer = customers[0];
 
       // 拿到对应的销售人员
-      let user = await userModel.select({ id: customer.userid });
+      let user = await userModel.select({ id: customer.user_id });
       customer.username = user[0] ? user[0].name : '暂未确定';
 
       // 拿到对应的线索列表
@@ -70,8 +78,8 @@ const customer = {
       // 时间格式的转换
       customer.created_at = customer.created_at.toLocaleString()
 
-      let salerIds = await userRoleModel.select({ roleId: "2" }).pluck('userId')
-      let salers = await userModel.all().whereIn('id', salerIds)
+      let salerIds = await userRoleModel.select({ role_id: "2" }).pluck('user_id')
+      let salers = await userModel.all().whereIn('id',salerIds)
 
       clues.map(e => e.created_at = e.created_at.toLocaleString())
 
@@ -112,10 +120,10 @@ const customer = {
   update: async function (req, res, next) {
     let id = req.body.id;
     let status = req.body.status;
-    let userid = req.body.userid;
+    let user_id = req.body.user_id;
     let remark = req.body.remark;
     try {
-      const customer = await customerModel.update(id, { status, userid, remark })
+      const customer = await customerModel.update(id, { status, user_id, remark })
       if (customer) {
         res.json({ code: 200, data: customer })
       } else {
