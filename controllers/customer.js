@@ -71,7 +71,7 @@ const customer = {
       customer.created_at = customer.created_at.toLocaleString()
 
       let salerIds = await userRoleModel.select({ roleId: "2" }).pluck('userId')
-      let salers = await userModel.all().whereIn('id',salerIds)
+      let salers = await userModel.all().whereIn('id', salerIds)
 
       clues.map(e => e.created_at = e.created_at.toLocaleString())
 
@@ -89,7 +89,7 @@ const customer = {
   },
   signup: async function (req, res, next) {
     // 将网址传递的参数拿到，并传递到模板中（模板拿到，发送ajax时带上该参数）
-    res.render('signup', { utf: req.query.utf })
+    res.render('signup', { utf: req.query.utf, title: 'crm-demo' })
   },
 
 

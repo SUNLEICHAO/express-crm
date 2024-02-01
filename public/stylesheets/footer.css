@@ -1,0 +1,22 @@
+.page-footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  padding: 24px 0 20px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 12px;
+  background-color: rgba(10, 10, 10, 1);
+  border-top: 1px solid #aaa;
+  color: #999;
+  font-family: Poppins;
+}
+
+.beian {
+  color: #fff;
+  margin-left: 10px;
+}
+
+.beian:hover {
+  color: #999;
+}

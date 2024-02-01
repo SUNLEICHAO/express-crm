@@ -49,7 +49,7 @@ body>div {
   font-weight: 300;
 }
 
-.header-right{
+.header-right {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -57,14 +57,14 @@ body>div {
 }
 
 
-.header-quit{
+.header-quit {
   border-bottom: 1px solid #fff;
   cursor: pointer;
   margin-left: 20px;
   font-size: 18px;
 }
 
-.page-body{
+.page-body {
   flex: 1;
   display: flex;
   overflow: hidden;
@@ -136,8 +136,9 @@ body>div {
   font-size: 16px;
   font-weight: 600;
 }
-.user-role__text{
-  color:#ec673e;
+
+.user-role__text {
+  color: #ec673e;
 }
 
 /* .form-table input:first-child {
@@ -181,4 +182,13 @@ body>div {
 
 .page-footer__copyright {
   line-height: 40px;
+}
+
+.beian {
+  color: #fff;
+  margin-left: 10px;
+}
+
+.beian:hover {
+  color: #eee;
 }
